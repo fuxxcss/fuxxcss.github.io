@@ -1,7 +1,7 @@
 ---
 layout: archive
 title: "学习资料"
-permalink: /leraning/
+permalink: /learning/
 author_profile: true
 ---
 
