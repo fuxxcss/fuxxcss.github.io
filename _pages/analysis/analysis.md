@@ -1,7 +1,8 @@
 ---
+layout: archive
+title: "漏洞分析"
 permalink: /analysis/
 author_profile: true
-title: "漏洞分析"
 ---
 
 🧑‍💻 [二进制](./binary.html)
