@@ -1,12 +1,3 @@
----
-permalink: /
-title: "关于我"
-author_profile: true
-redirect_from: 
-  - /about/
-  - /about.html
----
-
 ## 关于我
 
 **🕵️ 研究方向：**
