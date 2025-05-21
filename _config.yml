@@ -9,7 +9,7 @@
 # Basic Site Settings
 locale                   : "chinese-CN"
 site_theme               : "default"
-title                    : "个人主页    "
+title                    : "个人主页"
 title_separator          : "-"
 name                     : &name "fuxxcss"
 description              : &description ""
