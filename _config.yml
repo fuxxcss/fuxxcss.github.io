@@ -88,6 +88,13 @@ discovery_category:
   fuzz_discovery:
     title: '模糊测试'
 
+# Learning Category 
+learning_category:
+  topic_learning:
+    title: '议题学习'
+  paper_learning:
+    title: '论文学习'
+
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
