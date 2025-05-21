@@ -76,14 +76,18 @@ author:
   youtube          : # Username
   zhihu            : # Username
 
-# Publication Category - The following the list of publication categories and their headings
-publication_category:
-  books:
-    title: 'Books'
-  manuscripts:
-    title: 'Journal Articles'    
-  conferences:
-    title: 'Conference Papers'
+# Analysis Category 
+analysis_category:
+  binary_analysis:
+    title: '二进制'
+  web_analysis:
+    title: 'Web'    
+
+# Discovery Category 
+discovery_category:
+  fuzz_discovery:
+    title: '模糊测试'
+
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
@@ -214,74 +218,62 @@ kramdown:
 
 # These settings control the types of collections used by the template
 collections:
-  teaching:
+  analysis:
     output: true
     permalink: /:collection/:path/
-  publications:
+  discovery:
     output: true
     permalink: /:collection/:path/
-  portfolio:
+  learning:
     output: true
     permalink: /:collection/:path/
-  talks:
+  show:
     output: true
     permalink: /:collection/:path/
 
 
 # These settings control how pages and collections are included in the site
 defaults:
-  # _posts
+  # _analysis
   - scope:
       path: ""
-      type: posts
+      type: analysis
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: true
       share: true
       related: true
-  # _pages
+  # _discovery
   - scope:
       path: ""
-      type: pages
+      type: discovery
     values:
       layout: single
-      author_profile: true
-  # _teaching
-  - scope:
-      path: ""
-      type: teaching
-    values:
-      layout: single
-      author_profile: true
-      share: true
+      author_profile: false
+      read_time: true
       comments: true
-  # _publications
+      share: true
+      related: true
+  # _learning
   - scope:
       path: ""
-      type: publications
+      type: learning
     values:
       layout: single
-      author_profile: true
-      share: true
+      author_profile: false
       comments: true
-  # _portfolio
+      share: true
+      related: true
+  # _show
   - scope:
       path: ""
-      type: portfolio
+      type: show
     values:
       layout: single
       author_profile: true
-      share: true
-      comment: true
-  # _talks
-  - scope:
-      path: ""
-      type: talks
-    values:
-      layout: talk
-      author_profile: true
+      comments: true
       share: true
 
 
