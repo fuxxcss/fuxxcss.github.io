@@ -1,15 +1,17 @@
 ---
 layout: archive
-title: "二进制"
+title: ""
 permalink: /analysis/binary/
 author_profile: true
 ---
 
----
+{% if site.author.googlescholar %}
+  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
+{% endif %}
 
 {% include base_path %}
 
-<!-- New style rendering if publication categories are defined -->
+<!-- New style rendering if analysis categories are defined -->
 {% if site.analysis_category %}
   {% for category in site.analysis_category  %}
     {% assign title_shown = false %}

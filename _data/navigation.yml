@@ -9,13 +9,13 @@
 
 main:
 
-  - title: "漏洞分析"
+  - title: "分析"
     url: /analysis/
 
-  - title: "漏洞挖掘"
+  - title: "挖掘"
     url: /discovery/    
 
-  - title: "学习资料"
+  - title: "资料"
     url: /learning/    
     
   - title: "成果"

@@ -1,13 +1,21 @@
 ---
 title: "覆盖率引导的下一步，结构化感知的模糊测试"
-author_profile: false
-collection: learning
-type: "BlackHat"
-permalink: /learning/2019-blackhat-structured
-date: 2019
----
+excerpt: 'BlackHat 2019 , Going Beyond Coverage - Guided Fuzzing with Structured Fuzzing'
 
-Going Beyond Coverage - Guided Fuzzing with Structured Fuzzing
+collection: learning
+category: topic
+permalink: /learning/2019-blackhat-structured
+tags: 
+  - blackhat
+  - fuzz
+
+layout: single
+read_time: true
+author_profile: false
+comments: true
+share: true
+related: true
+---
 
 ![](../images/learning/2019_blackhat_structured/1.png)
 
@@ -56,7 +64,7 @@ Q：未来是否考虑使用AFLSmart来替代？
 A：目前项目所有样例都采用的libprotobuf-mutator，而且二者都是相似的方案，不考虑替代。
 
 ## 样例
-[Appcache fuzzer](https://chromium.googlesource.com/chromium/src/+/ada0c8e9c3c7b1ef3d592119688d8e8b9244f69d/content/browser/appcache/appcache_fuzzer.cc)
-[Skia fuzzer](https://chromium.googlesource.com/chromium/src/+/ada0c8e9c3c7b1ef3d592119688d8e8b9244f69d/testing/libfuzzer/fuzzers/skia_image_filter_proto_fuzzer.cc)
-[SQLite fuzzer](https://cs.chromium.org/chromium/src/third_party/sqlite/fuzz/?q=sqlite+fuzzer&dr=C)
+[Appcache fuzzer](https://chromium.googlesource.com/chromium/src/+/ada0c8e9c3c7b1ef3d592119688d8e8b9244f69d/content/browser/appcache/appcache_fuzzer.cc)<br>
+[Skia fuzzer](https://chromium.googlesource.com/chromium/src/+/ada0c8e9c3c7b1ef3d592119688d8e8b9244f69d/testing/libfuzzer/fuzzers/skia_image_filter_proto_fuzzer.cc)<br>
+[SQLite fuzzer](https://cs.chromium.org/chromium/src/third_party/sqlite/fuzz/?q=sqlite+fuzzer&dr=C)<br>
 

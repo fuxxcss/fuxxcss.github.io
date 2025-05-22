@@ -5,25 +5,22 @@ permalink: /learning/topic/
 author_profile: true
 ---
 
----
+<hr />
+
+{% if site.author.googlescholar %}
+  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
+{% endif %}
 
 {% include base_path %}
 
-<!-- New style rendering if publication categories are defined -->
+<!-- New style rendering if learning categories are defined -->
 {% if site.learning_category %}
-  {% for category in site.learning_category  %}
-    {% assign title_shown = false %}
     {% for post in site.learning reversed %}
-      {% if post.category != category[0] %}
+      {% if post.category != 'topic' %}
         {% continue %}
       {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
       {% include archive-single.html %}
     {% endfor %}
-  {% endfor %}
 {% else %}
   {% for post in site.learning reversed %}
     {% include archive-single.html %}

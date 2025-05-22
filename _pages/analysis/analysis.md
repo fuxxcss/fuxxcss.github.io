@@ -7,9 +7,12 @@ author_profile: true
 
 ---
 
-🧑‍💻 [二进制](./binary.html)
+🕵️ [二进制](./binary/)
 - Redis漏洞分析系列
 - 
 
-🔍 [Web]()
+🌐 [Web](./web)
+
+
+
 
