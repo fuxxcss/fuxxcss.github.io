@@ -7,11 +7,11 @@ author_profile: true
 
 ---
 
-🕵️ [二进制](./binary/)
+🕵️ [DBMS漏洞分析](./dbms/)
 - Redis漏洞分析系列
 - 
 
-🌐 [Web](./web)
+🌐 [XIoT漏洞分析](./xiot)
 
 
 

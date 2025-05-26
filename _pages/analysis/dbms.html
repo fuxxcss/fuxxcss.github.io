@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: ""
-permalink: /analysis/binary/
+title: "DBMS漏洞分析"
+permalink: /analysis/dbms/
 author_profile: true
 ---
 
@@ -13,19 +13,12 @@ author_profile: true
 
 <!-- New style rendering if analysis categories are defined -->
 {% if site.analysis_category %}
-  {% for category in site.analysis_category  %}
-    {% assign title_shown = false %}
     {% for post in site.analysis reversed %}
-      {% if post.category != category[0] %}
+      {% if post.category != 'dbms' %}
         {% continue %}
       {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
       {% include archive-single.html %}
     {% endfor %}
-  {% endfor %}
 {% else %}
   {% for post in site.analysis reversed %}
     {% include archive-single.html %}

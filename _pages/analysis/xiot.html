@@ -1,6 +1,6 @@
 ---
 layout: archive
-title: ""
+title: "XIoT漏洞分析"
 permalink: /analysis/web/
 author_profile: true
 ---
@@ -12,22 +12,15 @@ author_profile: true
 {% include base_path %}
 
 <!-- New style rendering if learning categories are defined -->
-{% if site.learning_category %}
-  {% for category in site.learning_category  %}
-    {% assign title_shown = false %}
-    {% for post in site.learning reversed %}
-      {% if post.category != category[0] %}
+{% if site.analysis_category %}
+    {% for post in site.analysis reversed %}
+      {% if post.category != 'xiot' %}
         {% continue %}
       {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
       {% include archive-single.html %}
     {% endfor %}
-  {% endfor %}
 {% else %}
-  {% for post in site.learning reversed %}
+  {% for post in site.analysis reversed %}
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}
