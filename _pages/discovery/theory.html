@@ -1,0 +1,29 @@
+---
+layout: archive
+title: "方法论"
+permalink: /discovery/theory/
+author_profile: true
+---
+
+{% if site.author.googlescholar %}
+  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
+{% endif %}
+
+{% include base_path %}
+
+<!-- New style rendering if discovery categories are defined -->
+{% if site.discovery_category %}
+    {% for post in site.discovery reversed %}
+      {% if post.category != 'theory' %}
+        {% continue %}
+      {% endif %}
+      {% include archive-single.html %}
+    {% endfor %}
+{% else %}
+  {% for post in site.discovery reversed %}
+    {% include archive-single.html %}
+  {% endfor %}
+{% endif %}
+
+
+

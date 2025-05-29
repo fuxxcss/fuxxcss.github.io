@@ -88,6 +88,12 @@ analysis_category:
   web:
     title: 'Web'
 
+discovery_category:
+  0day:
+    title: '0 day'
+  nday:
+    title: 'N day'
+
 
 # These settings control the types of collections used by the template
 collections:
