@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: "XIoT漏洞分析"
-permalink: /analysis/xiot/
+title: "Web漏洞分析"
+permalink: /analysis/web/
 author_profile: true
 ---
 
@@ -14,7 +14,7 @@ author_profile: true
 <!-- New style rendering if learning categories are defined -->
 {% if site.analysis_category %}
     {% for post in site.analysis reversed %}
-      {% if post.category != 'xiot' %}
+      {% if post.category != 'web' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}

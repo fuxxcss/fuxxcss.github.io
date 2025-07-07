@@ -13,14 +13,14 @@ redirect_from:
 ## 研究生阶段
 
 **🎓 研究方向：**
-- DBMS内存安全
-- XIoT漏洞挖掘
+- DBMS模糊测试
+- 自动化代码审计
 
 **🐙 研究项目：**
 
+- [Redi2Fuzz](https://github.com/fuxxcss/redi2fuzz)，DBMS模糊测试框架
+- [Joern101](https://github.com/fuxxcss/joern101)，基于joern的自动化代码审计
 - [CheckSecc](https://github.com/fuxxcss/checksecc)，C语言版CheckSec
-- [Redi2fuxx](https://github.com/fuxxcss/redi2fuxx)，Redis-Based数据库模糊测试工具
-- [WTF](https://github.com/fuxxcss/wtf)，web自动化渗透测试工具
 
 ---
 

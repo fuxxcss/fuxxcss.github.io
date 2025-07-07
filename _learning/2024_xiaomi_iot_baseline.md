@@ -1,10 +1,10 @@
 ---
-title: "消费级物联网，从安全基线到攻击面"
-excerpt: '从《消费级物联网安全基线》4.0到攻击面'
+title: "《消费级物联网安全基线》4.0"
+excerpt: '从安全基线到攻击面'
 
-collection: analysis
-category: xiot
-permalink: /analysis/iot-baseline
+collection: learning
+category: topic
+permalink: /learning/iot-baseline
 tags: 
   - iot
   - xiaomi
@@ -22,7 +22,7 @@ related: true
 
 2021年初，小米作为物联网安全领域的践行者，首次对外发布了《消费级物联网安全基线》，向物联网企业提供了一份开放的安全要求实施指南。小米内部及合作厂商依据此安全基线对各品类物联网产品进行安全评估和安全检测工作，我们真切地感受到在基线的指引下，物联网产品安全能力大幅度的提升[^1]。
 
-![](../images/analysis/xiaomi/iot_baseline_cover.png)
+![](../images/learning/2024_xiaomi_iot_baseline/iot_baseline_cover.png)
 
 2024年1月，小米正式对外发布《消费级物联网安全基线》4.0版本，4.0版本从行业发展以及落地实施角度出发[^1]：
 1. 优化修改了 33 项安全要求描述，细化落地规范易于理解；
