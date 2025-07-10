@@ -1,0 +1,31 @@
+---
+layout: archive
+title: "议题学习"
+permalink: /learning/note/
+author_profile: true
+---
+
+<hr />
+
+{% if site.author.googlescholar %}
+  <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
+{% endif %}
+
+{% include base_path %}
+
+<!-- New style rendering if learning categories are defined -->
+{% if site.learning_category %}
+    {% for post in site.learning reversed %}
+      {% if post.category != 'note' %}
+        {% continue %}
+      {% endif %}
+      {% include archive-single.html %}
+    {% endfor %}
+{% else %}
+  {% for post in site.learning reversed %}
+    {% include archive-single.html %}
+  {% endfor %}
+{% endif %}
+
+
+
