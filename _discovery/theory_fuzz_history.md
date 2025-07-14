@@ -17,11 +17,11 @@ share: true
 related: true
 ---
 
+![](../images/discovery/bart.png)
+
 ## 1988年
 
 威斯康星大学麦迪逊分校的Bart Miller教授布置了一些项目，旨在指导学生去研究与操作系统相关的特定领域，其中的一个项目首次应用fuzz的概念到程序评估上。
-
-![](../images/discovery/bart.png)
 
 *操作系统应用程序可靠性评估 − Fuzz生成器：* 这个项目的目标是，在给定不可预测的输入流的情况下，评估各种UNIX应用程序的健壮性。这个项目有两个部分：
 1. 首先，构建一个fuzz生成器。这是一个输出随机字符流的程序。
@@ -50,7 +50,7 @@ fuzz生成器需要生成随机字符的输出流，它需要几个选项，使�
 
 Immunity安全公司的Dave Aitel在BlackHat USA 2002上作了关于SPIKE介绍的演讲，发表宣言：我曾经嘲笑fuzzer，但后来你改变了我的整个人生观！
 
-![](../images/discovery/spike.png)
+![](../images/discovery/history/spike.png)
 
 SPIKE寻找新的漏洞，通过：
 1. 快速重现一个复杂的二进制协议
@@ -69,7 +69,7 @@ SPIKE提供了一系列工具，包括寻找web漏洞（目录遍历、SQL注入
 
 Peach由Michael Eddington发布在ph-neutral 0x7d4，通过编写pit文件，可以对web服务、文件解析器等几乎任何目标进行模糊测试。
 
-![](../images/discovery/peach.png)
+![](../images/discovery/history/peach.png)
 
 **节点说明：**
 1. 基于文件结构化，基于生成的fuzz方法
@@ -80,7 +80,7 @@ Peach由Michael Eddington发布在ph-neutral 0x7d4，通过编写pit文件，可
 
 Mozilla安全团队的Jesse Ruderman编写了jsfunfuzz，并发表在用于在Firefox中测试JavaScript引擎。
 
-![](../images/discovery/jsfunfuzz.png)
+![](../images/discovery/history/jsfunfuzz.png)
 
 jsfunfuzz测试的是JavaScript语言引擎本身，而不是DOM（这意味着它可以处理函数、对象、操作符和垃圾收集等语言特性，而不是通过"窗口"或"文档"访问DOM对象）。
 
@@ -115,7 +115,7 @@ x = {};
 
 北京大学团队在IEEE 2010发表论文《TaintScope: A Checksum-Aware Directed Fuzzing Tool for Automatic Software Vulnerability Detection》[^1]。
 
-![](../images/discovery/taintscope.png)
+![](../images/discovery/history/taintscope.png)
 
 该论文具有相当的前瞻性：
 1. 应用了定向模糊测试的概念，使用动态污点分析针对敏感函数（比如内存分配函数、字符串操作函数）调用进行分析，得到输入中的热字节。
@@ -131,7 +131,7 @@ x = {};
 
 lcamtuf.coredump.cx发布了afl-fuzz，它使用一种新型的编译时插桩和遗传算法来自动发现干净、有趣的测试用例，这些测试用例会触发目标二进制文件中新的内部状态。这大大提高了代码的功能覆盖率。
 
-![](../images/discovery/afl.png)
+![](../images/discovery/history/afl.png)
 
 相比于其他fuzzer，afl-fuzz有相当多的优势：
 1. 基于覆盖率引导的变异。
@@ -148,7 +148,7 @@ lcamtuf.coredump.cx发布了afl-fuzz，它使用一种新型的编译时插桩�
 
 Google开源了syzkaller，用于针对linux内核进行模糊测试；Google启动了sanitizer项目，用于编译时插桩，在运行时发现漏洞。
 
-![](../images/discovery/syszkaller.png)
+![](../images/discovery/history/syszkaller.png)
 
 sanitizer项目包括一系列漏洞检测器（ASAN、TSAN等），可以针对内存损坏、竞态条件等漏洞自动分类。
 
@@ -161,7 +161,7 @@ sanitizer项目包括一系列漏洞检测器（ASAN、TSAN等），可以针对
 
 在当时，模糊测试并没有被广泛使用，而且对开发人员来说很麻烦，需要大量的手工工作。针对该问题，Google提出了OSS-Fuzz，这是一个模糊测试平台[^2]，帮助项目创建fuzzer，并提供漏洞报告。
 
-![](../images/discovery/oss-fuzz.png)
+![](../images/discovery/history/oss-fuzz.png)
 
 OSS-Fuzz是一个免费的服务，自从发布以来，OSS-Fuzz已经成为开源社区的一项关键服务。
 
@@ -174,7 +174,7 @@ OSS-Fuzz是一个免费的服务，自从发布以来，OSS-Fuzz已经成为开�
 
 伊利诺伊大学厄巴纳-香槟分校和斯图加特大学团队在ICSE 2024发表论文《Fuzz4All: Universal Fuzzing with Large Language Models》。
 
-![](../images/discovery/fuzz4all.png)
+![](../images/discovery/history/fuzz4all.png)
 
 fuzz4all借助大语言模型取代变异策略，尝试实现通用的模糊测试框架，相比与其他模糊测试框架，在LoC方面有巨大优势。
 
