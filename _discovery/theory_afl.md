@@ -185,7 +185,7 @@ void foo_instrumented(){
 
 **1.4 影子内存**
 
-MemToShadow函数返回内存地址shadow_base=addr >>3+0x20000000，从栈的shadow_base操作可以看到，对于1个字节的内存的poison/notpoison情况，使用1个bit来表示。
+MemToShadow函数返回内存地址shadow_base=addr>>3+0x20000000，从栈的shadow_base操作可以看到，对于1个字节的内存的poison/notpoison情况，使用1个bit来表示。
 
 **2.TSAN**
 

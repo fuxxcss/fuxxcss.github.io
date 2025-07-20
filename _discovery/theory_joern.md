@@ -25,9 +25,9 @@ related: true
 1. 学习1day，在补丁对比和逆向工程的辅助下，定位漏洞，学习1day。
 2. 寻找攻击面，从海量代码中确定好测试的对象，比如特定函数、API接口，聚焦高风险区域，比如命令执行、文件解析。从中寻找新的攻击面，在此攻击面上执行模糊测试。
 
-代码审计策略有多种，每种策略都包括4个元素：
-1. 起点：代码审计的起点。
-2. 终点：代码审计的目标，或者跟踪代码的终点。
+代码审计策略有多种，每种策略都包括4个元素，其中以污点分析为基础：
+1. 起点（source）：代码审计的起点。
+2. 终点（sink）：代码审计的目标，或者跟踪代码的终点。
 3. 方法：代码审计的方法，比如，跟踪数据流、控制流。
 4. 漏洞类型：针对的是什么类型的漏洞。
 
@@ -154,4 +154,102 @@ joern有以下5个核心功能：
 
 ## CPG
 
+2014年，代码属性图（CPG）首次作为建模和发现漏洞的概念被提出。下面的代码示例，展示了代码的主要组成部分，包括子函数调用、判断语句，赋值运算等。
 
+``` c
+void foo() { 
+  int x = source(); 
+  if (x < MAX) { 
+    int y = 2 * x; 
+    sink(y); 
+  } 
+}
+```
+
+代码示例有3种常用的中间表示，用来存储代码的各种逻辑：
+1. 抽象语法树（AST），完整解析语法和语义，是生成其他中间表示的基础，但是这种原始结构不适合高级的代码分析。
+2. 控制流程图（CFG），描述了基本块之间的执行路径，缺点是无法提供数据流信息。
+3. 程序依赖图（PDG），表示数据依赖和控制依赖两种依赖关系，缺点是基本块无法进行区分。
+
+![](coder.png)
+
+将上述三种中间表示组合成一个联合结构体，实现能够表征漏洞类型的CPG,CPG有以下3个组成部分：
+1. 节点。以AST生成的节点作为CPG的节点，类型包括函数、变量、控制结构，也包括高级结构，比如HTTP端点。每个节点都有一个类型。类型表示由节点表示的程序构造的类型，例如，具有`METHOD`类型的节点表示方法，而具有`LOCAL`类型的节点表示局部变量的声明。
+2. 边。CPG的边是有标签的有向边，由CFG、PDG生成的边构成，表示节点之间的多种关系。例如，为了表示一个函数包含一个局部变量，我们可以创建一条从函数节点到局部变量节点的带有`contains`标签的边。
+3. 键值对。节点携带键值对（属性），其中有效的键依赖于节点类型。例如，函数至少有一个名称和一个签名，而局部声明至少有声明变量的名称和类型。
+
+![](cpg.png)
+
+综上，CPG是有向的、有边标记的、有属性的多图，并且我们每个节点至少携带一个表示其类型的属性。
+
+## 查询语言
+
+查询基于Scala，以step的形式从CPG查询可能存在的各种漏洞模式。
+
+### 一、steps
+
+最顶层的step是cpg，从cpg出发能够实现复杂的查询规则。下面是常用的step。
+
+**1.call step**
+
+作为顶层step时，表示代码中所有的调用点，通常根据其子step：name或者filter进行匹配。
+| 子step | 使用示例 |
+| :-: | :-: |
+|Code string	|cpg.call.code.l
+|Call name	|cpg.call.name.l
+|Location	|cpg.call.name("foo").location.l
+|Calling method	|cpg.call.name("foo").method.l
+|Argument	|cpg.call.name("foo").argument.code.l
+|Filter	|cpg.call.filter(_.argument.code("42")).name.l
+
+作为子step时，用来列出调用和被调用的方法。
+
+| step | 使用示例 |
+| :-: | :-: |
+| .callOut | cpg.method.name("main").callOut.name.l
+| .callIn | cpg.method.name("exit").callIn.code.l
+
+**2.method step**
+
+
+
+**3.taint step**
+
+reachableBy 和 reachableByFlows作为污点step的实现。
+
+如果source到sink是可到达的，reachableBy会返回具体的source，reachableByFlows会返回source到sink的路径。
+
+**4.filt step**
+
+除了step自身的模式匹配，filter step用来提供复杂的过滤机制。除此之外，还有where和wherenot。
+
+
+### 二、示例
+
+下面是一个查询示例：
+
+``` scala
+val src =
+  cpg.method(".*malloc$").callIn.where(_.argument(1).arithmetic)
+
+cpg.method("(?i)memcpy").callIn.filter { memcpyCall =>
+  memcpyCall
+    .argument(1)
+    .reachableBy(src)
+    .where(_.inAssignment.target.codeExact(memcpyCall.argument(1).code))
+    .whereNot(_.argument(1).codeExact(memcpyCall.argument(3).code))
+    .hasNext
+}
+```
+
+在c语言中，堆溢出有很多情况引发，上面的查询示例针对的是其中一种情况：
+1. 使用malloc系列函数
+
+
+## 集成
+
+使用sc脚本和python
+
+
+https://blog.convisoappsec.com/en/finding-classes-to-exploit-insecure-unchecked-vulnerabilities-in-java-with-joern/
+2021-NSEC
