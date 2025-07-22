@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: "Web漏洞分析"
-permalink: /analysis/web/
+title: "API漏洞分析"
+permalink: /analysis/api/
 author_profile: true
 ---
 
@@ -14,7 +14,7 @@ author_profile: true
 <!-- New style rendering if learning categories are defined -->
 {% if site.analysis_category %}
     {% for post in site.analysis reversed %}
-      {% if post.category != 'web' %}
+      {% if post.category != 'api' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}

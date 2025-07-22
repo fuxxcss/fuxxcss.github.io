@@ -13,7 +13,7 @@ author_profile: true
 - Redis漏洞分析系列
 - 
 
-🌐 [Web漏洞分析](./web)
+🌐 [API漏洞分析](./api)
 
 
 
