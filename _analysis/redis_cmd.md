@@ -396,6 +396,136 @@ keyReference *getKeysPrepareResult(getKeysResult *result, int numkeys) {
 
 ```
 
-## CVE-2023-28856 
+## CVE-2023-28425 断言错误，导致DoS
+
+披露时间：2023年3月
+复现版本：7.0.8
+修复版本：7.1.0
+
+| 严重程度 | CWE | 攻击向量 | 攻击复杂度 | 需要权限 |
+| :----:  | :----: | :----: | :----: | :----: |
+| 5.5 / 10 |  None | Local | Low | Low |
+
+### 一、前置知识
+
+MSETNX常用来设置，表示唯一逻辑对象的不同字段的不同键，以确保设置所有字段或根本不设置字段。
+
+``` shell
+MSETNX key value [key value ...]
+```
+
+即使只存在一个键，MSETNX也不会执行任何操作。仅当所有键均不存在时，设置全部的键。
+
+### 二、PoC
+
+多次设置一个相同的键名时，触发断言错误，导致服务端DoS：
+
+``` shell
+MSETNX key 1 key 2
+```
+
+查看ASAN，发现断言错误发生在src/db.c:191，函数dbAdd中。
+
+``` shell
+==8739==ERROR: AddressSanitizer: unknown-crash on address 0x0000800f7000 at pc 0x7fbe6c2f0956 bp 0x7ffe393edda0 sp 0x7ffe393ed560
+READ of size 1048576 at 0x0000800f7000 thread T0
+#0 0x7fbe6c2f0955 in memcpy ../../../../src/libsanitizer/sanitizer_common/sanitizer_common_interceptors_memintrinsics.inc:115
+#1 0x56026be851ce in memtest_preserving_test /opt/redis-7.0.8/src/memtest.c:317
+#2 0x56026be3f37d in memtest_test_linux_anonymous_maps /opt/redis-7.0.8/src/debug.c:1863
+#3 0x56026be3f647 in doFastMemoryTest /opt/redis-7.0.8/src/debug.c:1904
+#4 0x56026be403ad in printCrashReport /opt/redis-7.0.8/src/debug.c:2047
+#5 0x56026be3cd01 in _serverAssert /opt/redis-7.0.8/src/debug.c:1015
+#6 0x56026be3d811 in _serverAssertWithInfo /opt/redis-7.0.8/src/debug.c:1092
+#7 0x56026bd893a6 in dbAdd /opt/redis-7.0.8/src/db.c:191
+#8 0x56026bd8a108 in setKey /opt/redis-7.0.8/src/db.c:270
+#9 0x56026bdccd5e in msetGenericCommand /opt/redis-7.0.8/src/t_string.c:585
+#10 0x56026bdccf78 in msetnxCommand /opt/redis-7.0.8/src/t_string.c:597
+#11 0x56026bd27805 in call /opt/redis-7.0.8/src/server.c:3374
+#12 0x56026bd2b481 in processCommand /opt/redis-7.0.8/src/server.c:4008
+```
+
+### 三、漏洞成因
+
+断言错误发生在src/db.c:191，函数dbAdd中，表示在向Redis添加键时，发现键已经存在了。这说明在添加键之前，存在逻辑错误，未正确判断键是否存在。
+
+``` c
+/* Add the key to the DB. It's up to the caller to increment the reference
+ * counter of the value if needed.
+ *
+ * The program is aborted if the key already exists. */
+void dbAdd(redisDb *db, robj *key, robj *val) {
+    sds copy = sdsdup(key->ptr);
+    dictEntry *de = dictAddRaw(db->dict, copy, NULL);
+
+👉  serverAssertWithInfo(NULL, key, de != NULL);
+
+    dictSetVal(db->dict, de, val);
+    signalKeyAsReady(db, key, val->type);
+    if (server.cluster_enabled) slotToKeyAddEntry(de, db);
+    notifyKeyspaceEvent(NOTIFY_NEW,"new",key,db->id);
+}
+```
+
+MSETNX核心逻辑在函数msetGenericCommand中，调用时参数nx置1。逻辑错误在于，nx置1时，只检验了所有键是否存在于Redis，然后便设置所有键的flag为`SETKEY_DOESNT_EXIST`。当存在多个名字相同的键（比如多个key）时，同样通过校验，但是第一次创建key后，下一个key的flag还是`SETKEY_DOESNT_EXIST`，导致dbAdd中的断言错误。
+
+``` c
+void msetGenericCommand(client *c, int nx) {
+    int j;
+    int setkey_flags = 0;
+    ...
+    /* Handle the NX flag. The MSETNX semantic is to return zero and don't
+     * set anything if at least one key already exists. */
+    if (nx) {
+        for (j = 1; j < c->argc; j += 2) {
+            // 检验所有键是否存在于Redis
+👉           if (lookupKeyWrite(c->db,c->argv[j]) != NULL) {
+                addReply(c, shared.czero);
+                return;
+            }
+        }
+        setkey_flags |= SETKEY_DOESNT_EXIST;
+    }
+
+    for (j = 1; j < c->argc; j += 2) {
+        c->argv[j+1] = tryObjectEncoding(c->argv[j+1]);
+        setKey(c, c->db, c->argv[j], c->argv[j + 1], setkey_flags);
+        notifyKeyspaceEvent(NOTIFY_STRING,"set",c->argv[j],c->db->id);
+    }
+    ...
+}
+```
+
+### 四、补丁
+
+补丁之后，函数只校验所有键是否存在于Redis，未设置所有键的flag，把判断重复键的工作交给dbAdd。
+
+```c 
+void msetGenericCommand(client *c, int nx) {
+    int j;
+-   int setkey_flags = 0;
+    ...
+    /* Handle the NX flag. The MSETNX semantic is to return zero and don't
+     * set anything if at least one key already exists. */
+    if (nx) {
+        for (j = 1; j < c->argc; j += 2) {
+            // 检验所有键是否存在于Redis
+            if (lookupKeyWrite(c->db,c->argv[j]) != NULL) {
+                addReply(c, shared.czero);
+                return;
+            }
+        }
+-       setkey_flags |= SETKEY_DOESNT_EXIST;
+    }
+
+    for (j = 1; j < c->argc; j += 2) {
+        c->argv[j+1] = tryObjectEncoding(c->argv[j+1]);
+-       setKey(c, c->db, c->argv[j], c->argv[j + 1], setkey_flags);
++       setKey(c, c->db, c->argv[j], c->argv[j + 1], 0);
+        notifyKeyspaceEvent(NOTIFY_STRING,"set",c->argv[j],c->db->id);
+    }
+    ...
+}
+```
+
 
 
