@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: "API漏洞分析"
-permalink: /analysis/api/
+title: "缓存件漏洞分析"
+permalink: /analysis/cached/
 author_profile: true
 ---
 
@@ -11,10 +11,10 @@ author_profile: true
 
 {% include base_path %}
 
-<!-- New style rendering if learning categories are defined -->
+<!-- New style rendering if analysis categories are defined -->
 {% if site.analysis_category %}
     {% for post in site.analysis reversed %}
-      {% if post.category != 'api' %}
+      {% if post.category != 'cached' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}

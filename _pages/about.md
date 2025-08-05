@@ -13,14 +13,12 @@ redirect_from:
 ## 研究生阶段
 
 **🎓 研究方向：**
-- DBMS模糊测试
-- API安全测试
+- 中间件测试
 - 自动化代码审计
 
 **🐙 研究项目：**
 
-- [Redi2Fuzz](https://github.com/fuxxcss/redi2fuzz)，DBMS模糊测试框架
-- [APIzz](https://github.com/fuxxcss/apizz)，API安全测试工具
+- [Redi2Fuzz](https://github.com/fuxxcss/redi2fuzz)，缓存中间件模糊测试框架
 - [Joern101](https://github.com/fuxxcss/joern101)，基于joern的自动化代码审计
 - [CheckSecc](https://github.com/fuxxcss/checksecc)，C语言版CheckSec
 

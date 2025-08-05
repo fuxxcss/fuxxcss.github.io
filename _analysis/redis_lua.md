@@ -3,7 +3,7 @@ title: "Redis漏洞分析，lua脚本篇"
 excerpt: 'CVE-2024-31449 , CVE-2024-46981 , CVE-2022-24834 , CVE-2021-32626'
 
 collection: analysis
-category: dbms
+category: cached
 permalink: /analysis/redis-lua
 tags: 
   - redis

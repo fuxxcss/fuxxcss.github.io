@@ -3,7 +3,7 @@ title: "Redis漏洞分析，命令篇"
 excerpt: ''
 
 collection: analysis
-category: dbms
+category: cached
 permalink: /analysis/redis-cmd
 tags: 
   - redis

@@ -3,7 +3,7 @@ title: "Redis漏洞分析，ACL篇"
 excerpt: 'CVE-2024-31227 , CVE-2024-51741 , valkey/issues/1832'
 
 collection: analysis
-category: dbms
+category: cached
 permalink: /analysis/redis-acl
 tags: 
   - redis
