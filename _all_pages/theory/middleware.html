@@ -1,9 +1,11 @@
 ---
 layout: archive
-title: "缓存件漏洞分析"
-permalink: /analysis/cached/
+title: "分布式与中间件"
+permalink: /theory/middleware/
 author_profile: true
 ---
+
+<hr />
 
 {% if site.author.googlescholar %}
   <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
@@ -11,16 +13,16 @@ author_profile: true
 
 {% include base_path %}
 
-<!-- New style rendering if analysis categories are defined -->
-{% if site.analysis_category %}
-    {% for post in site.analysis reversed %}
-      {% if post.category != 'cached' %}
+<!-- New style rendering if theory categories are defined -->
+{% if site.theory_category %}
+    {% for post in site.theory reversed %}
+      {% if post.category != 'middleware' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}
     {% endfor %}
 {% else %}
-  {% for post in site.analysis reversed %}
+  {% for post in site.theory reversed %}
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}

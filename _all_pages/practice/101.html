@@ -1,11 +1,9 @@
 ---
 layout: archive
-title: "学习笔记"
-permalink: /learning/note/
+title: "101项目"
+permalink: /practice/101/
 author_profile: true
 ---
-
-<hr />
 
 {% if site.author.googlescholar %}
   <div class="wordwrap">You can also find my articles on <a href="{{site.author.googlescholar}}">my Google Scholar profile</a>.</div>
@@ -13,16 +11,16 @@ author_profile: true
 
 {% include base_path %}
 
-<!-- New style rendering if learning categories are defined -->
-{% if site.learning_category %}
-    {% for post in site.learning reversed %}
-      {% if post.category != 'note' %}
+<!-- New style rendering if practice categories are defined -->
+{% if site.practice_category %}
+    {% for post in site.practice reversed %}
+      {% if post.category != '101' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}
     {% endfor %}
 {% else %}
-  {% for post in site.learning reversed %}
+  {% for post in site.practice reversed %}
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}

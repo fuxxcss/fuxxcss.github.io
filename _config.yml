@@ -82,17 +82,19 @@ learning_category:
   paper:
     title: '论文'    
 
-analysis_category:
-  binary:
-    title: '二进制'
-  web:
-    title: 'Web'
+practice_category:
+  101:
+    title: '101'
+  focus:
+    title: '中间件测试'
 
-discovery_category:
-  0day:
-    title: '0 day'
-  nday:
-    title: 'N day'
+theory_category:
+  basic:
+    title: '基础'
+  middleware:
+    title: '中间件'
+  test:
+    title: '测试'
 
 
 # These settings control the types of collections used by the template
@@ -100,10 +102,10 @@ collections:
   learning:
     output: true
     permalink: /:collection/:path/
-  analysis:
+  theory:
     output: true
     permalink: /:collection/:path/
-  discovery:
+  practice:
     output: true
     permalink: /:collection/:path/
   show:
@@ -180,8 +182,9 @@ analytics:
 
 # Reading Files
 include:
+  - all
   - .htaccess
-  - _pages
+  - _all_pages
   - files
 exclude:
   - "*.sublime-project"

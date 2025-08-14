@@ -29,7 +29,6 @@ related: true
 
 ![](../images/learning/2019_blackhat_structured/2.png)
 
-
 ## 为什么需要结构化感知
 
 fuzz的初心是挖掘漏洞，结构化感知的方案可以挖出更多漏洞。对于下面的 sqlite 堆溢出，非结构化感知的oss-fuzz经过了多年的持续fuzz，输入了数百亿的测试用例，仍然无法发现。然而结构化fuzz很快就找到了。 

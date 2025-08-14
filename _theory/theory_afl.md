@@ -2,8 +2,8 @@
 title: "AFL(++)模糊测试框架"
 excerpt: '边覆盖率反馈的工作原理'
 
-collection: discovery
-category: theory
+collection: theory
+category: discovery
 permalink: /theory/afl
 tags: 
   - fuzz

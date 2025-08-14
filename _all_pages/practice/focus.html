@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: "N day"
-permalink: /discovery/nday/
+title: "中间件测试"
+permalink: /practice/focus/
 author_profile: true
 ---
 
@@ -11,16 +11,16 @@ author_profile: true
 
 {% include base_path %}
 
-<!-- New style rendering if learning categories are defined -->
-{% if site.discovery_category %}
-    {% for post in site.discovery reversed %}
-      {% if post.category != 'nday' %}
+<!-- New style rendering if practice categories are defined -->
+{% if site.practice_category %}
+    {% for post in site.practice reversed %}
+      {% if post.category != 'focus' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}
     {% endfor %}
 {% else %}
-  {% for post in site.discovery reversed %}
+  {% for post in site.practice reversed %}
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}

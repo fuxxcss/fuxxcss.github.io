@@ -9,11 +9,11 @@
 
 main:
 
-  - title: "分析"
-    url: /analysis/
+  - title: "实践"
+    url: /practice/
 
-  - title: "挖掘"
-    url: /discovery/    
+  - title: "理论"
+    url: /theory/
 
   - title: "资料"
     url: /learning/    

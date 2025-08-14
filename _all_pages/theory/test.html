@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: "方法论"
-permalink: /discovery/theory/
+title: "测试开发"
+permalink: /theory/test/
 author_profile: true
 ---
 
@@ -11,16 +11,16 @@ author_profile: true
 
 {% include base_path %}
 
-<!-- New style rendering if discovery categories are defined -->
-{% if site.discovery_category %}
-    {% for post in site.discovery reversed %}
-      {% if post.category != 'theory' %}
+<!-- New style rendering if test categories are defined -->
+{% if site.theory_category %}
+    {% for post in site.theory reversed %}
+      {% if post.category != 'test' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}
     {% endfor %}
 {% else %}
-  {% for post in site.discovery reversed %}
+  {% for post in site.theory reversed %}
     {% include archive-single.html %}
   {% endfor %}
 {% endif %}
