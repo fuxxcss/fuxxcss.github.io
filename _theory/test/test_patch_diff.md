@@ -1,9 +1,9 @@
 ---
-title: "漏洞还原"
+title: "安全测试：漏洞还原"
 excerpt: '补丁比对还原PoC'
 
-collection: discovery
-category: theory
+collection: theory
+category: test
 permalink: /theory/patch-diff
 tags: 
   - patch
@@ -17,7 +17,7 @@ share: true
 related: true
 ---
 
-![](../images/discovery/patch.png)
+![](../images/theory/patch.png)
 
 ## 综述
 
@@ -36,16 +36,16 @@ related: true
 
 特点是增加一个if语句，对程序涉及的变量进行检查，如果不满足条件，则中断控制流(例如，从函数返回)。如下图的CVE-2017-8395漏洞修复：
 
-![](../images/discovery/patch/CVE-2017-8395.png)
+![](../images/theory/patch/CVE-2017-8395.png)
 
 **2.条件执行**
 
 特点是在现有条件语句(if、while和for)中添加一个连接布尔表达式，对程序涉及的变量进行检查。如下图CVE-2017-8392的漏洞修复。
 
-![](../images/discovery/patch/CVE-2017-8392.png)
+![](../images/theory/patch/CVE-2017-8392.png)
 
 **3.条件分配**
 
 特点是增加一个新的if语句，对程序涉及的变量进行检查，满足条件则进行赋值。如下图CVE-2013-0211的漏洞修复。
 
-![](../images/discovery/patch/CVE-2013-0211.png)
+![](../images/theory/patch/CVE-2013-0211.png)

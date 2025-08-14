@@ -2,9 +2,9 @@
 title: "计算机四大件：计算机组成与系统架构"
 excerpt: 'Intel Core i7的核心模块'
 
-collection: learning
-category: note
-permalink: /learning/basic-arch
+collection: theory
+category: basic
+permalink: /theory/basic-arch
 tags: 
   - cs
   - architecture
@@ -18,7 +18,7 @@ share: true
 related: true
 ---
 
-![](../images/learning/coffee_lake.png)
+![](../images/theory/coffee_lake.png)
 
 ### 计算机系统
 
@@ -36,7 +36,7 @@ related: true
 - 交互指令，与cache硬布线交互不同，需要软件执行交互的指令，如访存指令、I/O指令。
 - 特殊指令，在图灵机计算的基础上改进，以x86为例：添加了诸如nop、hlt、原子指令、特权指令这些现代计算机体系结构相关的指令。
 
-![](../images/learning/arch/instruction.png)
+![](../images/theory/arch/instruction.png)
 
 Intel Core i7是CISC指令系统，采用可变长指令格式，一条指令有以下6个组成部分：
 - 指令前缀（Prefix）。可选项，用于修改指令的默认行为，每个指令前缀占用一个字节，且在一条指令中可以有0到4个前缀。
@@ -127,7 +127,7 @@ SIB用于补充ModR/M，其包含三个字段：
 
 而在64位模式下：CS, DS, ES, SS被视为每个段基为0。这为代码、数据和堆栈创建了一个平面地址空间，线性地址等于有效地址。FS和GS两个段寄存器都可以用作线性地址计算中的附加基寄存器(比如指向进程环境块、线程信息块的偏移量的指针)。
 
-![](../images/learning/arch/64bit_segment.png)
+![](../images/theory/arch/64bit_segment.png)
 
 在64位模式下，分段被禁用，但段其中的字段还有其他作用，例如特权模型在CS寄存器上的CPL。并且段描述符中的DPL和其中的段选择子中的RPL都在工作。
 
@@ -135,13 +135,13 @@ SIB用于补充ModR/M，其包含三个字段：
 
 在标志寄存器中，有三种类型，S表示状态寄存器CF、OF等；C表示控制寄存器DF，用来控制字符串指令；X表示系统寄存器。
 
-![](../images/learning/arch/eflags.png)
+![](../images/theory/arch/eflags.png)
 
 **控制寄存器(CR0, CR2, CR3, 和 CR4)**
 
 - CR0包含控制处理器运行模式和状态的系统控制标志。
 
-![](../images/learning/arch/cr0.png)
+![](../images/theory/arch/cr0.png)
 
 CR0.PG控制分页，CR0.CD控制cache，CR0.NW控制回写，CR0.AM控制对齐掩码，CR0.WP控制写保护。
 
@@ -149,13 +149,13 @@ CR0.PG控制分页，CR0.CD控制cache，CR0.NW控制回写，CR0.AM控制对齐
 - CR2包含导致缺页异常的线性地址。
 - CR3包含分页目录基址的物理地址，和两个标志(PCD和PWT)。
 
-![](../images/learning/arch/cr3.png)
+![](../images/theory/arch/cr3.png)
 
 只指定基地址的最高有效位(减去低12位);地址的低12位假定为0。因此，第一个分页结构必须对齐到一个页（4KB）边界。PCD和PWT标志控制该分页结构在处理器内部数据高速缓存中的高速缓存(它们不控制页目录信息的TLB高速缓存)。
 
 - CR4包含一组标志，用于启用几个体系结构扩展，并表示操作系统或执行机构对特定处理器功能的支持。
 
-![](../images/learning/arch/cr4.png)
+![](../images/theory/arch/cr4.png)
 
 CR4.PSE控制页大小扩展，CR4.PAE控制页物理地址扩展，CR4.UMIP控制SGDT, SIDT, SLDT, SMSW,  STR不会在CPL>0时执行，CR4.VMXE控制VMX指令，CR4.SMEP和CR4.SMAP用于保护特权模式，CR4.CET控制CET。
 
@@ -163,21 +163,21 @@ CR4.PSE控制页大小扩展，CR4.PAE控制页物理地址扩展，CR4.UMIP控�
 
 - GDTR提供寄存器保存全局描述符表GDT的入口地址，LGDT和SGDT指令分别加载和存储GDTR寄存器。GDT中存放段描述符，以供段选择子索引。段选择符用来描述一个段的类型、基地址、描述符权限（DPL）等。
 
-![](../images/learning/arch/gdtr.png)
+![](../images/theory/arch/gdtr.png)
 
 段选择子由三个字段组成，索引、表指示符（指示GDT还是LDT索引）和请求权限（RPL）。简化系统下，RPL等于其索引的描述符的DPL。
 
-![](../images/learning/arch/segment_limit.png)
+![](../images/theory/arch/segment_limit.png)
 
 - IDTR寄存器保存中断描述符表IDT的入口地址，LIDT和SIDT指令分别加载和存储IDTR寄存器。
 
 在处理器上电或复位时，基址设置为默认值0，限制设置为0FFFFH。在处理器初始化过程中，可以改变寄存器中的基址和限制。
 
-![](../images/learning/arch/idtr.png)
+![](../images/theory/arch/idtr.png)
 
 IDT中的每一项都是一个门描述符，根据分类，可以是中断门描述符、陷阱门描述符，每一项由8字节组成。
 
-![](../images/learning/arch/idt_gate.png)
+![](../images/theory/arch/idt_gate.png)
 
 在发生中断/陷入时，
 
@@ -185,11 +185,11 @@ IDT中的每一项都是一个门描述符，根据分类，可以是中断门�
 2. 根据段选择子在GDT中索引段描述符
 3. 根据段描述符索引到代码段基址，再根据偏移值索引中断处理程序的地址。
 
-![](../images/learning/arch/idt_gdt.png)
+![](../images/theory/arch/idt_gdt.png)
 
 - TR提供寄存器保存当前进程TSS的选择子，在GDT中索引TSS描述符获取TSS地址。
 
-![](../images/learning/arch/tr.png)
+![](../images/theory/arch/tr.png)
 
 
 除此之外，还有其他特殊寄存器：
@@ -260,7 +260,7 @@ intel特殊指令有很多类型：支持并行的原子指令、支持权限管
 - 中断：异步异常是由处理器外部的 I/O 设备中的事件产生的。
 - 异常：陷阱、故障和终止都是同步异常，它们是执行一条指令（称为故障指令）的直接产物。因为指令是按时钟周期执行的，所以由指令造成的异常必然是同步的。如缺页时引起缺页故障，调用系统调用时进入陷阱。
 
-![](../images/learning/arch/exception.png)
+![](../images/theory/arch/exception.png)
 
 简单而言，异常可以分为异步和同步两类，其中异步的异常是来自外部的 I/O 设备，同步的异常则都是指令的产物。
 
@@ -273,7 +273,7 @@ CPU上只有有限多的脚针，负责与外部通讯，比如有数据线，�
 Local APIC 是在CPU内部的，每个逻辑处理核心都配有一的对应的local APIC。Local APIC 能产生、发送和接受中断，多处理器CPU之间的通讯也是通过Local APIC来实现的。
 LINT0、LINT1引脚一般和INTR引脚、NMI引脚共享，禁用Local APIC时作为INTR引脚、NMI引脚使用。
 
-![](../images/learning/arch/apic.png)
+![](../images/theory/arch/apic.png)
 
 **3.Intel异常类型**
 
@@ -281,8 +281,8 @@ x86-64 系统中有 256 种不同的异常类型，其中 0~31 号是 Intel 架�
 
 简单而言，0-31 号是故障或终止，32~255 号提供给不同操作系统，定义中断或系统调用。例如，异常号0描述除法故障，异常号13描述通用保护故障，异常号14描述页故障，异常号18描述机器检查终止。
 
-![](../images/learning/arch/exception1.png)
-![](../images/learning/arch/exception2.png)
+![](../images/theory/arch/exception1.png)
+![](../images/theory/arch/exception2.png)
 
 具体来说，故障和终止有以下几种：
 - 除法错误。当应用试图除以零时，或者当一个除法指令的结果对目标操作数来说太大了，就会发生除法错误。
@@ -305,7 +305,7 @@ CPU 的安全模型是上层软件和操作系统安全机制的根本保证，�
 
 在保护模式下，x86有4个保护级别，从0(最高权限)到3(最低权限)。实际上，大多数操作系统只使用2个级别：0和3，它们分别被称为内核模式和用户模式。
 
-![](../images/learning/arch/ring.png)
+![](../images/theory/arch/ring.png)
 
 处理器使用特权级别来阻止以较低特权级别运行的程序或任务访问拥有更大特权的部分，除了在受控情况下。当处理器检测到违反特权级别时，它会生成一个通用保护异常(#GP)。
 
@@ -326,7 +326,7 @@ CPU 的安全模型是上层软件和操作系统安全机制的根本保证，�
 
 隔离模型是指 CPU 在处理不同的对象时，对于资源的操作是相互隔离的。按照安全设定，不同的对象之间的操作在未授权下是互相不可见的。根据对象层次的不同，可分为进程间的隔离、虚拟机间的隔离以及超线程之间的隔离。
 
-![](../images/learning/arch/isolation.png)
+![](../images/theory/arch/isolation.png)
 
 CPU 能够支持多任务同步，其基础是 CPU的隔离模型。CPU 隔离模型负责保证任务之间相互隔离、互不影响。
 
@@ -341,13 +341,13 @@ Intel Core i7 CPU 中封装了 4 个核、一个所有核共享的 L3 高速缓�
 
 每个核除了包含 L1、L2 高速缓存外，还包含具有两层结构的 TLB 缓存、一组基于QuickPath 技术的快速的点到点链路。点到点链路是为了让一个核与其他核、外部 I/O 桥直接通信。
 
-![](../images/learning/arch/memory_model.png)
+![](../images/theory/arch/memory_model.png)
 
 ### 一、四级页表
 
 Core i7的1-3级页表项格式如下：
 
-![](../images/learning/arch/pte1-3.png)
+![](../images/theory/arch/pte1-3.png)
 
 每项索引一个4KB的虚拟页表，重要字段：
 - P： 物理内存中是否存在子页表（1）（0）。
@@ -361,7 +361,7 @@ Core i7的1-3级页表项格式如下：
 
 Core i7的4级页表项格式如下：
 
-![](../images/learning/arch/pte4.png)
+![](../images/theory/arch/pte4.png)
 
 每项索引一个4KB的物理页。重要字段：
 - P： 内存中是否存在子页（1）（0）
@@ -384,7 +384,7 @@ PTE 有三个权限位，控制对页的访问。R/W 控制是只读还是读写
 
 四级页表将虚拟地址翻译为物理地址的过程如下，36 位 VPN 划分为 4 个 9 位的片，每个片用作某一级页表查询时的偏移量。每个页表大小4 KB，每个页表项大小8B，64位。
 
-![](../images/learning/arch/va2pa.png)
+![](../images/theory/arch/va2pa.png)
 
 ### 三、字节序
 
@@ -428,7 +428,7 @@ CET(Control-flow Enforcement Technology)即控制流保护技术，针对ROP以�
 
 影栈由操作系统或VMM从内存中分配的辅助栈，应用程序不能直接修改它。当执行CALL指令时（控制传输指令/流，如近调用，远调用，调用中断/异常处理程序等），处理器将返回地址push正常栈和影栈(注意，影栈只保存返回地址，而不保存传递给调用指令的参数)。通过页表保护确保影栈免受篡改，从而使常规存储指令不能修改影栈的内容。为了提供这种保护，页表保护被扩展为支持页的附加属性，将它们标记为“影栈”页。
 
-![](../images/learning/arch/ss.png)
+![](../images/theory/arch/ss.png)
 
 在函数返回时，处理器弹出影栈副本，并将其与正常栈副本进行比较。如果两者不一致，处理器将引发控制保护故障#CP。
 
@@ -440,7 +440,7 @@ CET(Control-flow Enforcement Technology)即控制流保护技术，针对ROP以�
 
 ENDBR指令用于标记间接调用的合法跳转目标地址，在处理器上解码为NOP，主要用作处理器流水线的标记指令，用于检测违反控制流的情况。同时声明下一个指令必须也是ENDBR，否则触发#CP异常。
 
-![](../images/learning/arch/ibt.png)
+![](../images/theory/arch/ibt.png)
 
 ### 三、Intel VMX
 
@@ -448,7 +448,7 @@ Intel VMX定义了对IA-32处理器上的虚拟机的处理器级支持。两个
 1. 虚拟机监视器(VMM)，VMM充当主机，完全控制处理器和其他平台硬件。VMM为Guest软件提供虚拟处理器的抽象，并允许它直接在逻辑处理器上执行。VMM能够保留对处理器资源、物理内存、中断管理和I/O的选择性控制。
 2. Guest软件，每个虚拟机都是一个Guest软件环境，支持由操作系统和应用软件组成的栈。每个虚拟机都独立于其他虚拟机运行，并且使用物理平台提供的处理器、内存、存储、图形和I/O的相同接口。软件栈就像在没有VMM的平台上运行一样。在虚拟机中执行的软件必须以较低的权限运行，以便VMM可以保留对平台资源的控制。
 
-![](../images/learning/arch/vmx.png)
+![](../images/theory/arch/vmx.png)
 
 VMX操作分为两种:VMX root操作和VMX no-root操作。通常，VMM将在VMX root操作下运行，而Guest机软件将在VMX no-root操作下运行。VMX no-root操作中软件功能是有限的，正是这种限制使VMM能够保留对处理器资源的控制。在各自的操作里，CPL均可以从ring0到ring3变换。
 
@@ -461,4 +461,4 @@ SGX1扩展允许应用程序实例化一个受保护的容器，称为enclave/�
 SGX2扩展在飞地资源的运行时管理和飞地内的线程执行方面提供了额外的灵活性。
 一个应用程序虚拟地址空间的飞地如下图所示。
 
-![](../images/learning/arch/enclave.png)
+![](../images/theory/arch/enclave.png)

@@ -2,8 +2,8 @@
 title: "接口测试"
 excerpt: '功能测试、性能测试与安全测试'
 
-collection: discovery
-category: theory
+collection: theory
+category: test
 permalink: /theory/api-test
 tags: 
   - api
@@ -17,7 +17,7 @@ share: true
 related: true
 ---
 
-![](../images/discovery/api.png)
+![](../images/theory/api.png)
 
 ## 综述
 

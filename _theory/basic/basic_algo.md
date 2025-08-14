@@ -2,9 +2,9 @@
 title: "计算机四大件：算法与数据结构"
 excerpt: '十种典型算法思想'
 
-collection: learning
-category: note
-permalink: /learning/basic-algo
+collection: theory
+category: basic
+permalink: /theory/basic-algo
 tags: 
   - cs
   - algorithm
@@ -19,7 +19,7 @@ related: true
 ---
 
 
-![](../images/learning/turing_machine.png)
+![](../images/theory/turing_machine.png)
 
 ## 算法思想
 

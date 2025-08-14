@@ -2,9 +2,9 @@
 title: "计算机四大件：设计模式"
 excerpt: '18种常用设计模式的伪代码实现'
 
-collection: learning
-category: note
-permalink: /learning/basic-design
+collection: theory
+category: basic
+permalink: /theory/basic-design
 tags: 
   - cs
   - design pattern
@@ -17,7 +17,7 @@ share: true
 related: true
 ---
 
-![](../images/learning/abstract.png)
+![](../images/theory/abstract.png)
 
 ### 创建型模式
 
@@ -33,7 +33,7 @@ related: true
 
 以下示例演示了如何使用工厂方法开发跨平台 UI （用户界面） 组件， 并同时避免客户代码与具体 UI 类之间的耦合。
 
-![](../images/learning/design/factory.png)
+![](../images/theory/design/factory.png)
 
 基础对话框类使用不同的 UI 组件渲染窗口。 在不同的操作系统下， 这些组件外观或许略有不同， 但其功能保持一致。 Windows系统中的按钮在Web系统中仍然是按钮。如果使用工厂方法，就不需要为每种操作系统重写对话框逻辑。
 
@@ -108,7 +108,7 @@ class Application is
 
 下面例子通过应用抽象工厂模式， 使得客户端代码无需与具体 UI 类耦合， 就能创建跨平台的 UI 元素， 同时确保所创建的元素与指定的操作系统匹配。
 
-![](../images/learning/design/abstract_factory.png)
+![](../images/theory/design/abstract_factory.png)
 
 跨平台应用中的相同 UI 元素功能类似， 但是在不同操作系统下的外观有一定差异。 此外， 你需要确保 UI 元素与当前操作系统风格一致。 你一定不希望在 Windows 系统下运行的应用程序中显示 macOS 的控件。
 
@@ -195,7 +195,7 @@ class ApplicationConfigurator is
 
 下面关于生成器模式的例子演示了你可以如何复用相同的对象构造代码来生成不同类型的产品——例如汽车 （Car）——及其相应的使用手册 （Manual）。
 
-![](../images/learning/design/builder.png)
+![](../images/theory/design/builder.png)
 
 汽车是一个复杂对象， 有数百种不同的制造方法。 我们没有在 汽车类中塞入一个巨型构造函数， 而是将汽车组装代码抽取到单独的汽车生成器类中。 
 
@@ -320,7 +320,7 @@ class Application is
 
 在本例中， 原型模式能让你生成完全相同的几何对象副本， 同时无需代码与对象所属类耦合。
 
-![](../images/learning/design/clone.png)
+![](../images/theory/design/clone.png)
 
 所有形状类都遵循同一个提供克隆方法的接口。 在复制自身成员变量值到结果对象前， 子类可调用其父类的克隆方法。
 
@@ -453,7 +453,7 @@ class Application is
 
 下列适配器模式演示基于经典的 “方钉和圆孔” 问题。
 
-![](../images/learning/design/adapter.png)
+![](../images/theory/design/adapter.png)
 
 适配器假扮成一个圆钉 （Round­Peg）， 其半径等于方钉 （Square­Peg） 横截面对角线的一半 （即能够容纳方钉的最小外接圆的半径）。
 
@@ -527,7 +527,7 @@ hole.fits(large_sqpeg_adapter) // false
 
 在本例中， 我们将借助组合模式帮助你在图形编辑器中实现一系列的几何图形。
 
-![](../images/learning/design/composite.png)
+![](../images/theory/design/composite.png)
 
 组合图形自身并不完成具体工作， 而是将请求递归地传递给自己的子项目， 然后 “汇总” 结果。
 
@@ -621,7 +621,7 @@ class ImageEditor is
 
 在本例中， 装饰模式能够对敏感数据进行压缩和加密， 从而将数据从使用数据的代码中独立出来。
 
-![](../images/learning/design/wrapper.png)
+![](../images/theory/design/wrapper.png)
 
 程序使用一对装饰来封装数据源对象。 这两个封装器都改变了从磁盘读写数据的方式：
 - 当数据即将被写入磁盘前， 装饰对数据进行加密和压缩。 在原始类对改变毫无察觉的情况下， 将加密后的受保护数据写入文件。
@@ -719,7 +719,7 @@ class Application is
 
 在本例中， 外观模式简化了客户端与复杂视频转换框架之间的交互。
 
-![](../images/learning/design/facade.png)
+![](../images/theory/design/facade.png)
 
 你可以创建一个封装所需功能并隐藏其他代码的外观类， 从而无需使全部代码直接与数十个框架类进行交互。该结构还能将未来框架升级或更换所造成的影响最小化， 因为你只需修改程序中外观方法的实现即可。
 
@@ -785,7 +785,7 @@ class Application is
 
 本例演示如何使用代理模式在第三方腾讯视频 （TencentVideo， 代码示例中记为 TV） 程序库中添加延迟初始化和缓存。
 
-![](../images/learning/design/proxy.png)
+![](../images/theory/design/proxy.png)
 
 代理类实现和原下载器相同的接口， 并将所有工作委派给原下载器。 不过， 代理类会保存所有的文件下载记录， 如果程序多次请求同一文件， 它会返回缓存的文件。
 
@@ -882,7 +882,7 @@ class Application is
 
 在本例中， 责任链模式负责为活动的 GUI 元素显示上下文帮助信息。
 
-![](../images/learning/design/cor.png)
+![](../images/theory/design/cor.png)
 
 当用户将鼠标指针移动到某个元素并按下 F1键时， 程序检测到指针下的组件并对其发送帮助请求。 该请求不断向上传递到该元素所有的容器， 直至某个元素能够显示帮助信息。
 
@@ -983,7 +983,7 @@ class Application is
 
 在本例中， 命令模式会记录已执行操作的历史记录， 以在需要时撤销操作。
 
-![](../images/learning/design/cmd.png)
+![](../images/theory/design/cmd.png)
 
 有些命令会改变编辑器的状态 （例如剪切和粘贴）， 它们可在执行相关操作前对编辑器的状态进行备份。 命令执行后会和当前点备份的编辑器状态一起被放入命令历史 （命令对象栈）。 此后， 如果用户需要进行回滚操作， 程序可从历史记录中取出最近的命令， 读取相应的编辑器状态备份， 然后进行恢复。
 
@@ -1130,7 +1130,7 @@ class Application is
 
 在本例中， 迭代器模式用于遍历一个封装了访问微信好友关系功能的特殊集合。 该集合提供使用不同方式遍历档案资料的多个迭代器。
 
-![](../images/learning/design/iterator.png)
+![](../images/theory/design/iterator.png)
 
 客户端仅通过接口与集合和迭代器交互， 也就不会同具体类耦合。 如果你决定将应用连接到全新的社交网络， 只需提供新的集合和迭代器类即可， 无需修改现有代码。
 
@@ -1199,7 +1199,7 @@ class WeChatIterator implements ProfileIterator is
 
 在本例中， 观察者模式允许文本编辑器对象将自身的状态改变通知给其他服务对象。
 
-![](../images/learning/design/observer.png)
+![](../images/theory/design/observer.png)
 
 订阅者列表是动态生成的： 对象可在运行时根据程序需要开始或停止监听通知。
 
@@ -1383,7 +1383,7 @@ class ExampleApplication is
 
 在本例中， 状态模式将根据当前回放状态， 让媒体播放器中的相同控件完成不同的行为。
 
-![](../images/learning/design/state.png)
+![](../images/theory/design/state.png)
 
 播放器的主要对象总是会连接到一个负责播放器绝大部分工作的状态对象中。 部分操作会更换播放器当前的状态对象， 以此改变播放器对于用户互动所作出的反应。
 
@@ -1521,7 +1521,7 @@ class PlayingState extends State is
 
 本例中的模板方法模式为一款简单策略游戏中人工智能的不同分支提供 “框架”。
 
-![](../images/learning/design/template.png)
+![](../images/theory/design/template.png)
 
 游戏中所有的种族都有几乎同类的单位和建筑。 因此你可以在不同的种族上复用相同的 AI 结构， 同时还需要具备重写一些细节的能力。 
 
@@ -1606,7 +1606,7 @@ class MonstersAI extends GameAI is
 
 在本例中， 访问者模式为几何图像层次结构添加了对于 XML 文件导出功能的支持。
 
-![](../images/learning/design/visitor.png)
+![](../images/theory/design/visitor.png)
 
 具体元素类：
 
