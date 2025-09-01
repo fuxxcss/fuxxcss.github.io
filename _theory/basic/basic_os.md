@@ -18,13 +18,13 @@ share: true
 related: true
 ---
 
-![](../images/theory/xv6.png)
+![](../../images/theory/basic/xv6.png)
 
 ### xv6
 
 操作系统需要实现启动引导、进程管理、系统调用、文件系统等功能，存储在外存中，当启动引导配置完毕后，将正式接管硬件并向用户提供一个交互接口。
 
-![](../images/theory/os/source.png)
+![](../../images/theory/basic/os/source.png)
 
 xv6是MIT开发的用于教学的类UNIX操作系统，拥有完整的启动引导、文件系统、内核，支持多处理器，还包括一些提供给用户的sh程序。
 
@@ -270,7 +270,7 @@ GDT中需要存储两种描述符：存储段描述符和任务状态段描述�
 #define SEG_TSS   5  // this process's task state
 ```
 基于x86段描述符类型，构建段描述符结构体segdesc：
-![](../images/theory/os/segdesc.png)
+![](../../images/theory/basic/os/segdesc.png)
 
 xv6分别在不同阶段对两种GDT进行初始化：
 - 存储段(代码段、数据段)描述符，4个
@@ -365,7 +365,7 @@ xv6内核是宏内核，主要有5个核心功能：中断处理、进程管理�
 
 对应IA-32门描述符的结构，构造结构体gatedesc(mmu.h)。其中type字段用来区分中断STS_IG32和陷入STS_TG32两种类型。
 
-![](../images/theory/os/gatedesc.png)
+![](../../images/theory/basic/os/gatedesc.png)
 
 为门描述符每个字段设置的宏定义SETGATE及参数的意义如下：
 
@@ -798,7 +798,7 @@ found:
 
 内核栈的布局如下图所示：
 
-![](../images/theory/os/kstack.png)
+![](../../images/theory/basic/os/kstack.png)
 
 userinit函数建立初始进程：
 ``` c
@@ -924,7 +924,7 @@ struct pipe {
 
 一个文件调用pipe和fork即可得到一个单向的通信模型。
 
-![](../images/theory/os/pipe.png)
+![](../../images/theory/basic/os/pipe.png)
 
 ### 3.内存管理
 
@@ -1011,7 +1011,7 @@ xv6每个进程虚拟空间地址0~4GB，可以划分成三个部分：
 
 其中KERNBASE~4GB映射到物理地址0~4GB。
 
-![](../images/theory/os/vm.png)
+![](../../images/theory/basic/os/vm.png)
 
 **3.3 内存空间初始化**
 
@@ -1258,7 +1258,7 @@ void releasesleep(struct sleeplock *lk) {
 对于数据端口、命令端口、状态端口的I/O编址，xv6有独立编址和统一编址两种。
 1. 独立编址模式使用x86保留的1KB I/O地址空间，如0x3C0~0x3CF分配给彩色CGA显示控制器。
 
-![](../images/theory/os/io.png)
+![](../../images/theory/basic/os/io.png)
 
 2. 2.统一编址模式又称内存映射I/O，即MMIO。访问IO如同访问内存，简化了IO接口的复杂度。xv6涉及以下三个设备的MMIO：
 1)CGA映射到了内存地址0xB8000

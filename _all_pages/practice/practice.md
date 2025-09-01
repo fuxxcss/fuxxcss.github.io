@@ -5,7 +5,7 @@ permalink: /practice/
 author_profile: true
 ---
 
-**通过101项目入门，聚焦中间件测试**
+**深入中间件测试，从101到实战**
 
 ---
 
@@ -13,4 +13,4 @@ author_profile: true
 - fuzz101
 - joern101
 
-🦄 [中间件测试](./focus/)
+🦄 [中间件实战](./focus/)

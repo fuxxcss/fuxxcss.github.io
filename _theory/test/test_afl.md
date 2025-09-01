@@ -16,13 +16,13 @@ share: true
 related: true
 ---
 
-![](../images/theory/aflpp.png)
+![](../../images/theory/test/aflpp.png)
 
 ## 综述
 
 2013年提出的AFL(American Fuzzing Lop)方案，采用遗传编程（GP）作为反馈算法：适应度和进化指标均为边覆盖率(Edge Coverage)，遗传算子采用变异和交叉。
 
-![](../images/theory/afl/framework.png)
+![](../../images/theory/test/afl/framework.png)
 
 如果一个输入提高了边覆盖率，称为good种子。在迭代测试的过程中，保存good种子，报告bug。
 
@@ -50,13 +50,13 @@ AFL中将新状态作为适应度(当有新的 tuple (基本块->基本块)出�
 1. 变异（Mutation）
 一个父体的随机部分变异。常用的一种subtree mutation：在一个父体中随机选择一个突变点(mutation point)，随机生成一个子树，将父体中以突变点为根节点的子树替换为这个随机生成的子树。
 
-![](../images/theory/afl/mutation.png)
+![](../../images/theory/test/afl/mutation.png)
 
 2. 交叉（Crossover）
 
 两个父体基因的混合/交换。常用的一种子树(subtree) crossover过程：在每一个父体中随机选择一个杂交点(crossover point)，复制第二个父体中以杂交点为根节点的子树，将一父体杂交点下的子树替换为二父体下的子树，生成子体。
 
-![](../images/theory/afl/crossover.png)
+![](../../images/theory/test/afl/crossover.png)
 
 子树crossover由两个父体随机生成了一个子体。其他多种交叉/杂交方法中，也存在由两个父体生成两个子体的种类，如one-point crossover
 
@@ -73,17 +73,17 @@ AFL中将新状态作为适应度(当有新的 tuple (基本块->基本块)出�
 SBI需要对二进制程序反汇编，然后按需添加插桩代码，更新二进制程序存入磁盘。SBI需要处理重定位问题，有两种常用的方法：int3和跳板trampoline。
 首先来看最朴素的插桩方法，如下图所示。假设要对mov edx，0x1指令插桩，可以使用jmp指令将其覆盖，跳转到插桩代码。在插桩代码中：对寄存器状态进行保存，执行mov edx，0x1和标记代码(用来统计覆盖率等)，恢复寄存器状态，返回到正常指令。
 
-![](../images/theory/afl/sbi1.png)
+![](../../images/theory/test/afl/sbi1.png)
 
 这种方法有两个问题：首先jmp instrum指令是5个字节，如果插桩目标指令小于5字节，会出现覆盖下一条指令的问题；第二，插桩目标指令与标记代码一起执行，会造成寄存器状态的混乱。
 1. int3方案，使用x86的int 3指令，调试器用其实现软件断点，SBI库同样可以捕捉SIGTRAP信号，通过ptrace找到中断的地址，从而获取插桩点地址。相比于使用jmp覆盖原来的指令，使用int 3指令来覆盖只有1个字节0xcc，后面可以填充nop平衡相对地址。缺点是：int 3软件中断时间开销大；如果程序本身有很多int 3指令，会和插桩的int 3指令相混淆。
 2. 跳板(trampoline)方案，是简单方法的改进，以函数为单位进行插桩。创建所有函数的副本，放在新的代码段.text.instrum中；用jmp指令覆盖原始函数的第一条指令，使其跳转到副本函数。后面使用垃圾字节平衡相对地址。同时，在副本函数中，可以在每条可能的插桩目标指令前插入若干nop指令，方便使用call覆盖跳转到标记代码；为了相对寻址的正确性，重写所有寻址指令。例如，需要对ret指令进行标记，则在ret前覆写指令call hook_ret，hook_ret是标记函数，可以由SBI的动态库提供。在hook_ret中保存寄存器状态，运行相关指令，恢复寄存器状态。
 
-![](../images/theory/afl/sbi2.png)
+![](../../images/theory/test/afl/sbi2.png)
 
 上面的方案适合于直接调用、直接跳转和间接调用。对于间接跳转，以switch的汇编实现为例，需要修改跳转表中case地址，指向副本中的case。
 
-![](../images/theory/afl/sbi3.png)
+![](../../images/theory/test/afl/sbi3.png)
 
 缺点是：复制了所有函数，使得二进制程序占用空间增大；间接跳转需要额外的工作；对于内联数据，可能造成对数据的覆盖。最后，SBI的正确性都建立在反汇编的正确性上，如果反汇编有问题，一切修改都会破坏原来的二进制程序。
 
@@ -92,7 +92,7 @@ SBI需要对二进制程序反汇编，然后按需添加插桩代码，更新�
 DBI通过监视和控制所有执行的指令来动态插桩进程，不会出现SBI的各种问题，在现代平台上也不比SBI慢太多。
 一个DBI系统有很多组成部分，如下图所示。在操作系统上，虚拟机用来实现在指令流中动态插入新指令，而不会破坏主机内存中的进程。DBI工具用来启动DBI系统、与插桩引擎交互。
 
-![](../images/theory/afl/dbi.png)
+![](../../images/theory/test/afl/dbi.png)
 
 1. DBI工具向DBI系统注册函数instrument_bb，DBI引擎依此对基本块插桩。
 2. 初始化函数启动DBI系统。
@@ -133,7 +133,7 @@ ASAN包括一个编译器插桩模块和一个替代malloc函数的运行时库�
 
 对于每个内存读写指令，进行编译时插桩。IsPoisoned检查被访问的内存是否是可访问的(即not poisoned)，内存是否poisoned的元信息保存在影子内存中。
 
-![](../images/theory/afl/asan_inst.png)
+![](../../images/theory/test/afl/asan_inst.png)
 
 对内存的访问可以分为：栈访问和堆访问，二者都需要在分配的内存周围插入redzone，对redzone进行poison。然后插桩后的内存访问指令再通过IsPoisoned检查。
 
@@ -197,7 +197,7 @@ TSan 需要所有代码都以 -fsanitize=thread 编译参数进行编译。在�
 
 如下图所示，当一个线程对共享资源 v 的操作使用了锁，并且在之后一个 不同的线程中对共享资源 v 再次申请了锁并且使用完 后释放，那么率先使用锁对共享资源 v 操作的线程和后 续使用锁的线程满足 happens-before 关系。通过设置 happens-before 规则，在每个多线程进程中检测任意两 个操作之间是否满足happens-before关系。
 
-![](../images/theory/afl/tsan.png)
+![](../../images/theory/test/afl/tsan.png)
 
 如果存在两 个操作不满足 happens-before 关系，则判定存在竞态漏洞。因为happens-bofore方法能够确保所有操作之间不会存在结果不确定的情况，所以 happens-before 方法误报率低。
 
@@ -205,7 +205,7 @@ TSan 需要所有代码都以 -fsanitize=thread 编译参数进行编译。在�
 
 ### 一、工作流程
 
-![](../images/theory/afl/progress.png)
+![](../../images/theory/test/afl/progress.png)
 
 1. 确定模糊测试的对象，是命令行工具、动态库、虚拟机还是数据库等等。模糊测试的对象决定了构造的测试用例怎么输入，是从标准输入、编写harness还是通过驱动程序。
 2. 源码插桩/静态重写/qemu插桩，以便跟踪边覆盖率。
@@ -260,7 +260,7 @@ afl-clang-lto/afl-clang-lto++：需要下载llvm和lld，设置LLVM_CONFIG=llvm-
 
 ### 四、状态窗口
 
-![](../images/theory/afl/state.png)
+![](../../images/theory/test/afl/state.png)
 
 Process timing：Fuzzer运行时长、以及距离最近发现的路径、崩溃和挂起经过了多长时间。
 Overall results：Fuzzer当前状态的概述。
@@ -317,7 +317,7 @@ crashwalk：
 
 如下图，插入的代码trampoline_fmt_64，相当于一个inline函数 ，开辟一段栈区，0xe267是调用R(MAP_SIZE)产生的随机数，作为基本块的标识符和参数，传递给记录边覆盖率的函数__afl_maybe_log。该函数存在于afl为所有程序末尾插入的main_payload_64中。
 
-![](../images/theory/afl/trampoline.png)
+![](../../images/theory/test/afl/trampoline.png)
 
 **1.2 编译器级别(LLVM模式)**
 
@@ -488,11 +488,11 @@ export AFL_CUSTOM_MUTATOR_LIBRARY="full/path/to/libmutator.so"
 
 I2S关联的例子如下图所示。对cmp指令进行hook，运行指令时可以观察到eax的值为VALU，0x44434241则为ABCD(均为小端序)。
 
-![](../images/theory/afl/redqueen1.png)
+![](../../images/theory/test/afl/redqueen1.png)
 
 input中同样有VALU出现，由此推断：如果将输入中的VALU替换为ABCD，就有较大可能绕过这个障碍。
 
-![](../images/theory/afl/redqueen2.png)
+![](../../images/theory/test/afl/redqueen2.png)
 
 ## 循环测试
 
@@ -513,7 +513,7 @@ forkserver是AFL++的一种机制，为了避免从afl-fuzz调用fork启动被�
 afl-fuzz生成了测试进程，由于是第一次运行到插桩代码__afl_maybe_log，检测到了forkserver未启动，它则作为forserver，以后都是从被测程序自己fork，这样省略了execve开销。
 由于测试进程是fork出来的，继承了覆盖率信息的共享内存__AFL_SHM_ID，调用shmat将返回地址存储在__afl_area_ptr中，所以测试进程的覆盖率信息fuzzer可以直接访问到。
 
-![](../images/theory/afl/forkserver.png)
+![](../../images/theory/test/afl/forkserver.png)
 
 **2.forkserver传递信息**
 
@@ -535,7 +535,7 @@ forkserver从fuzzer接收测试用例，再将测试用例输入测试进程，�
 
 使用宏定义__AFL_LOOP(NUM)来决定单进程处理多少测试用例。需要注意的是每次fuzz过程都会改变一些进程或线程的状态变量，因此，在复用这个fuzz子进程的时候需要将这些变量恢复成初始状态。
 
-![](../images/theory/afl/loop.png)
+![](../../images/theory/test/afl/loop.png)
 
 官方建议的数值为1000，循环次数设置过高可能出现较多意料之外的问题，并不建议设置过高。
 

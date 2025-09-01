@@ -18,8 +18,7 @@ share: true
 related: true
 ---
 
-
-![](../images/theory/turing_machine.png)
+![](../../images/theory/basic/turing_machine.png)
 
 ## 算法思想
 

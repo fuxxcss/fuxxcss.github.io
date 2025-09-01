@@ -17,7 +17,7 @@ share: true
 related: true
 ---
 
-![](../images/theory/api.png)
+![](../../images/theory/test/api.png)
 
 ## 综述
 
