@@ -1,10 +1,10 @@
 ---
-title: "安全测试：漏洞分类"
+title: "漏洞：分类（Part 1/3）"
 excerpt: '内存破坏与语义化注入'
 
 collection: theory
-category: test
-permalink: /theory/vuln
+category: sec
+permalink: /theory/vuln-class
 tags: 
   - vuln
 
@@ -16,7 +16,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/test/vuln.png)
+![](../../images/theory/sec/vuln.png)
 
 ## 漏洞原理
 
@@ -521,7 +521,7 @@ SSRF的适应性：
 
 DirtyCow 漏洞（CVE-2016-5195）是最为典型的数据竞争引发的漏洞。如下图所示，正常的程序流程三次调用了 faultin_ page 函数完成了三个步骤，其中第二次进入 faultin_ page主要是处理写权限的页错误问题，要求的写权限标 志会被去掉，即去掉FOLL_WRITE标志位，第三次调用 faultin_page 时已经成功得到 cow 后的页面，且 flags 已经去掉 FOLL_WRITE，因此不会再产生写错误的处理， 可以直接写入 cow 的页。
 
-![](../../images/theory/test/types/dirtycow.png)
+![](../../images/theory/sec/types/dirtycow.png)
 
 但是如果在上述流程即第二 次页错误处理结束时，在一个新的线程调用madvise，会 unmap 掉前面 cow 的页面，又进入缺页处理，这里不同 的是在do_fault调用时，由于没有了写权限的要求，直接 调用了 do_read_fault读取映射文件的内存页，而不是内存页副本，后续即可实现越权写操作。
 在 DirtyCow 漏洞中，两个线程竞争的资源是内存页，并且造成了程序 正确性的影响。某些数据竞争发生时 并不会影响程序的正确性，例如当两个进程竞争的内存 共享资源和两个进程的逻辑完全无关，则认为构成数据竞争但是不构成竞态漏洞。DirtyCow正是由于在数据竞争发生之后导致 任意文件被恶意篡改的危害性结果，才被研究人员归结为竞态漏洞。
@@ -532,12 +532,12 @@ TOCTTOU（Time Of Check To Time Of Use）指计算机系统中的 资源与权�
 TOCTTOU 通常发生 在文件系统的访问时，特别是在 UNIX操作系统中较为 常见，文件系统访问一般会要求对文件先检查再写入， 这就导致检查与读写操作之间存在时间间隔，攻击者 可利用这种时间间隔对文件系统展开攻击。
 类 Unix 文件系统中存在 TOCTTOU 缺陷的根本原因在于文件 名和文件对象之间的映射是可变的，如下图所示，TOUCTTOU 的典型例子 Binmail。 Binmail是一个setuid-to-root程序，在普通用户权限下可 以调用执行 root 用户权限的操作。在正常的读取邮件 的过场中，Binmail 首先通过 lstat 函数查看文件 mail 的 信息，如果 mail文件是正常文件，不是符号链接则执行 open函数打开邮件。
 
-![](../../images/theory/test/types/tocttou.png)
+![](../../images/theory/sec/types/tocttou.png)
 
 但是由于 lstat和 open函数不是原始操作，所以如果在 lstat函数检查完毕后，另外一个线 程或者进程可以通过 unlink和 symlink操作将 mail文件 替换为指向系统关键文件/etc/passwd等文件的链接，那 么 open 的文件将会是替换后的系统关键文件，实现了任意文件读取。
 一个基于文件的TOCTTOU例子的exp如下图所示。use在check后面执行而导致的漏洞。
 
-![](../../images/theory/test/types/tocttou_exp.png)
+![](../../images/theory/sec/types/tocttou_exp.png)
 
 综上，TOCTTOU是竞态漏洞的子集，数据竞争和竞态漏洞存在交集。
 
@@ -545,7 +545,7 @@ TOCTTOU 通常发生 在文件系统的访问时，特别是在 UNIX操作系统
 
 Double Fetch也是竞态漏洞的一个子集，该漏洞的原理是：内核从用户空间中拷贝复杂数据时，数据在内核中有两次被取用，内核第一次取用数据进行安全检查（如缓冲区大小、指针可用性等），当检查通过后内核第二次取用数据进行实际处理。
 
-![](../../images/theory/test/types/double_fetch.png)
+![](../../images/theory/sec/types/double_fetch.png)
 
 在两次取用的时间间隔里，可以对已通过检查的用户态数据进行篡改，在第二次取用时造成访问越界或缓冲区溢出，最终导致内核崩溃或权限提升。Double Fetch通常会出现在以下场景：
 

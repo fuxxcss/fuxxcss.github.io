@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: "测试开发"
-permalink: /theory/test/
+title: "漏洞 & 漏洞挖掘"
+permalink: /theory/sec/
 author_profile: true
 ---
 
@@ -14,7 +14,7 @@ author_profile: true
 <!-- New style rendering if test categories are defined -->
 {% if site.theory_category %}
     {% for post in site.theory reversed %}
-      {% if post.category != 'test' %}
+      {% if post.category != 'sec' %}
         {% continue %}
       {% endif %}
       {% include archive-single.html %}

@@ -1,10 +1,10 @@
 ---
-title: "计算机四大件：设计模式"
+title: "计算机基础：设计模式（Part 3/6）"
 excerpt: '18种常用设计模式的伪代码实现'
 
 collection: theory
 category: basic
-permalink: /theory/basic-design
+permalink: /theory/design
 tags: 
   - cs
   - design pattern

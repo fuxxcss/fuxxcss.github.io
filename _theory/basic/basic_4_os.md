@@ -1,10 +1,10 @@
 ---
-title: "计算机四大件：操作系统"
+title: "计算机基础：操作系统（Part 4/6）"
 excerpt: 'xv6的源码实现'
 
 collection: theory
 category: basic
-permalink: /theory/basic-os
+permalink: /theory/os
 tags: 
   - cs
   - xv6

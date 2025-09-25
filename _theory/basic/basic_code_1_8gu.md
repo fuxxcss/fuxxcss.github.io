@@ -1,10 +1,10 @@
 ---
-title: "八股文：编程语言"
+title: "编程语言：八股文（Part 1/1）"
 excerpt: 'Python、Golang'
 
 collection: theory
 category: basic
-permalink: /theory/basic-8gu-big4
+permalink: /theory/code-8gu
 tags: 
   - 8gu
   - go
@@ -17,7 +17,6 @@ comments: true
 share: true
 related: true
 ---
-
 ![](../../images/theory/8gu.png)
 
 ## Python

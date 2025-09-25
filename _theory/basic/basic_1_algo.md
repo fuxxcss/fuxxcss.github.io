@@ -1,10 +1,10 @@
 ---
-title: "计算机四大件：算法与数据结构"
+title: "计算机基础：算法与数据结构（Part 1/6）"
 excerpt: '十种典型算法思想'
 
 collection: theory
 category: basic
-permalink: /theory/basic-algo
+permalink: /theory/algo
 tags: 
   - cs
   - algorithm

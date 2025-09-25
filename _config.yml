@@ -83,16 +83,16 @@ learning_category:
     title: '论文'    
 
 practice_category:
-  101:
+  '101':
     title: '101'
   focus:
-    title: '中间件测试'
+    title: '数据安全'
 
 theory_category:
   basic:
     title: '基础'
-  middleware:
-    title: '中间件'
+  db:
+    title: '数据库'
   test:
     title: '测试'
 

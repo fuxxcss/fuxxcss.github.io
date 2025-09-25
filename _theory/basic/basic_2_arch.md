@@ -1,10 +1,10 @@
 ---
-title: "计算机四大件：计算机组成与系统架构"
+title: "计算机基础：组成与系统架构（Part 2/6）"
 excerpt: 'Intel Core i7的核心模块'
 
 collection: theory
 category: basic
-permalink: /theory/basic-arch
+permalink: /theory/arch
 tags: 
   - cs
   - architecture
