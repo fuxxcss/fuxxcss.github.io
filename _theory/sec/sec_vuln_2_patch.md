@@ -4,7 +4,7 @@ excerpt: '修复与防御'
 
 collection: theory
 category: sec
-permalink: /theory/vuln-patch
+permalink: /theory/sec/vuln-patch
 tags: 
   - patch
   - diff

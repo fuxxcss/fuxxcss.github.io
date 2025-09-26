@@ -4,7 +4,7 @@ excerpt: '代码审计与自动化的八股文'
 
 collection: theory
 category: sec
-permalink: /theory/sast-8gu
+permalink: /theory/sec/sast-8gu
 tags: 
   - code audit
   - sast

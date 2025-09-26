@@ -4,7 +4,7 @@ excerpt: '内存破坏与语义化注入'
 
 collection: theory
 category: sec
-permalink: /theory/vuln-class
+permalink: /theory/sec/vuln-class
 tags: 
   - vuln
 

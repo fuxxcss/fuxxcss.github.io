@@ -1,16 +1,12 @@
 ---
-title: "Agent4Sec：前言（Part 1/）"
+title: "Sec4Agent：目标（Part 1/）"
 excerpt: ''
 
 collection: practice
 category: 
-permalink: /practice/a4s-1
+permalink: /practice/focus/s4a-goal
 tags: 
   - agent
-  - vuln
-  - fuzz
-  - sast
-  - patch
 
 layout: single
 read_time: true
@@ -19,3 +15,7 @@ comments: true
 share: true
 related: true
 ---
+
+agent安全，通过安全agent实现：
+- 代码安全
+- 决策层安全

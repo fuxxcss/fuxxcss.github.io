@@ -4,7 +4,7 @@ excerpt: '边覆盖率反馈的工作原理'
 
 collection: theory
 category: sec
-permalink: /theory/fuzz-afl
+permalink: /theory/sec/fuzz-afl
 tags: 
   - fuzz
 

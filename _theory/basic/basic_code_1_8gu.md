@@ -4,7 +4,7 @@ excerpt: 'Python、Golang'
 
 collection: theory
 category: basic
-permalink: /theory/code-8gu
+permalink: /theory/basic/code-8gu
 tags: 
   - 8gu
   - go

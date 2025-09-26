@@ -4,7 +4,7 @@ excerpt: '常见的基础问题'
 
 collection: theory
 category: basic
-permalink: /theory/basic-8gu
+permalink: /theory/basic/8gu
 tags: 
   - cs
   - 8gu

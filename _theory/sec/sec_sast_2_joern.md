@@ -4,7 +4,7 @@ excerpt: '代码分析自动化'
 
 collection: theory
 category: sec
-permalink: /theory/sast-joern
+permalink: /theory/sec/sast-joern
 tags: 
   - code audit
   - sast

@@ -4,7 +4,7 @@ excerpt: '漏洞防御的八股文'
 
 collection: theory
 category: sec
-permalink: /theory/vuln-8gu
+permalink: /theory/sec/vuln-8gu
 tags: 
   - vuln
   - 8gu

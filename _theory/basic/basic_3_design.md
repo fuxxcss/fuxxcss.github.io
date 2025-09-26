@@ -4,7 +4,7 @@ excerpt: '18种常用设计模式的伪代码实现'
 
 collection: theory
 category: basic
-permalink: /theory/design
+permalink: /theory/basic/design
 tags: 
   - cs
   - design pattern

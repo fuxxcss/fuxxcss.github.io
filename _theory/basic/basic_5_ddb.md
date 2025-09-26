@@ -4,7 +4,7 @@ excerpt: '分布式与数据库'
 
 collection: theory
 category: basic
-permalink: /theory/ddb
+permalink: /theory/basic/ddb
 tags: 
   - distributed
   - database

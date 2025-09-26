@@ -1,10 +1,10 @@
 ---
-title: "Sec4Agent：前言（Part 1/）"
-excerpt: ''
+title: "Agent：实现（Part 1/）"
+excerpt: '智能体的组成部分'
 
-collection: practice
+collection: theory
 category: 
-permalink: /practice/s4a-1
+permalink: /theory/agent/parts
 tags: 
   - agent
 

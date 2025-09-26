@@ -4,7 +4,7 @@ excerpt: '代码审计的策略'
 
 collection: theory
 category: sec
-permalink: /theory/sast-base
+permalink: /theory/sec/sast-base
 tags: 
   - code audit
   - sast

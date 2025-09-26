@@ -4,7 +4,7 @@ excerpt: 'xv6的源码实现'
 
 collection: theory
 category: basic
-permalink: /theory/os
+permalink: /theory/basic/os
 tags: 
   - cs
   - xv6

@@ -4,7 +4,7 @@ excerpt: '十种典型算法思想'
 
 collection: theory
 category: basic
-permalink: /theory/algo
+permalink: /theory/basic/algo
 tags: 
   - cs
   - algorithm

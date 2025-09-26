@@ -4,7 +4,7 @@ excerpt: 'Intel Core i7的核心模块'
 
 collection: theory
 category: basic
-permalink: /theory/arch
+permalink: /theory/basic/arch
 tags: 
   - cs
   - architecture

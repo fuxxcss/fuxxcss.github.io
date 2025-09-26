@@ -4,7 +4,7 @@ excerpt: '记录模糊测试发展的重要节点'
 
 collection: theory
 category: sec
-permalink: /theory/fuzz-history
+permalink: /theory/sec/fuzz-history
 tags: 
   - fuzz
 

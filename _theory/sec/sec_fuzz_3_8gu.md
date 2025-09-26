@@ -4,7 +4,7 @@ excerpt: '模糊测试的八股文'
 
 collection: theory
 category: sec
-permalink: /theory/fuzz-8gu
+permalink: /theory/sec/fuzz-8gu
 tags: 
   - fuzz
 
