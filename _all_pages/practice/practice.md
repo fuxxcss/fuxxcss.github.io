@@ -15,5 +15,4 @@ author_profile: true
 - agent101
 
 🦄 [实战](./focus/)
-- agent4sec
-- sec4agent
+- agent ⇄ sec
