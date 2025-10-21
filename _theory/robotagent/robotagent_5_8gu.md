@@ -1,12 +1,12 @@
 ---
-title: "Agent：八股文（Part 1/）"
-excerpt: '模型，框架'
+title: "RobotAgent：八股文（Part 5/5）"
+excerpt: '大模型，开发框架'
 
 collection: theory
-category: 
-permalink: /theory/agent/8gu
+category: robotagent
+permalink: /theory/robotagent/8gu
 tags: 
-  - agent
+  - robotagent
   - 8gu
 
 layout: single
@@ -17,17 +17,26 @@ share: true
 related: true
 ---
 
+![](../../images/theory/8gu.png)
+
+## 任职要求
+
+### 一、机器人
+
+仿真环境：熟悉主流机器人仿真环境，包括但不限于 Isaac Sim、MuJoCo 等，能进行环境构建、资产导入和大规模并行训练。
+有仿真到现实迁移项目经验者优先。
+了解机器人运动学、动力学基础，熟悉抓取、放置、装配等常见机器人操作任务及路径规划、力控等相关算法者优先。
+有机器人操作相关项目经历（如基于视频生成模型的机器人控制、跨机器人平台适配、长周期任务规划），或在 ICRA、IROS、NeurIPS、CVPR 等领域顶会发表论文者优先。
+
+### 二、智能体
+
+熟悉 VLA 多模态模型的训练与推理。
+深入理解强化学习基础理论 (PPO, GRPO 等) 及实践经验。
+熟练掌握 PyTorch/TensorFlow 等深度学习框架。
+
+## 八股文
+
 幻觉是什么？严格的定义？
-
-## agent八股
-
-### 一、方向
-
-机器人agent
-agent开发
-ai产品
-
-### 二、岗位
 
 **1.机器人agent**
 
@@ -39,7 +48,6 @@ https://www.inhand.com.cn/job/2026%e5%b1%8a%e6%a0%a1%e6%8b%9b-%e6%9c%ba%e5%99%a8
 
 **2.agent开发、算法**
 
-https://360campus.zhiye.com/campus/detail?jobAdId=2dc11d23-5bc9-49f8-9cb8-d963984aca1a
 https://baicgroup.zhiye.com/campus/detail?jobAdId=a5d4473f-f2e9-41c1-8b7e-b4a3a0f2c90a
 https://zhaopin.meituan.com/web/position/detail?jobUnionId=3587000738&highlightType=campus
 https://xyzp.51job.com/ZYJTGS/jobs.html

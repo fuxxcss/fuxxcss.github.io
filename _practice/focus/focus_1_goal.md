@@ -1,10 +1,10 @@
 ---
-title: "Agent⇄Sec：目标（Part 1/）"
+title: "ADK-Python：...（Part 1/）"
 excerpt: ''
 
 collection: practice
 category: 
-permalink: /practice/focus/a⇄s-goal
+permalink: /practice/focus/adk-py
 tags: 
   - agent
   - vuln
@@ -51,7 +51,7 @@ Agent⇄Sec目标是利用A4S为S4A赋能，构建解决agent安全问题的agen
 
 ### 一、底层代码漏洞
 
-agent开发语言Python，Java，JS，和底层库C/C++中的漏洞：
+agent开发语言Python，Java，JS，和底层库C/C++中的常见漏洞：
 - 内存破坏
 - 语义化注入
 
@@ -60,6 +60,8 @@ agent开发语言Python，Java，JS，和底层库C/C++中的漏洞：
 1.越狱攻击
 2.提示注入攻击
 3.投毒攻击
+
+使用guardrail防护
 
 ### 三、感知系统的漏洞
 

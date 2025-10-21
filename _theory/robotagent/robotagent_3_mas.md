@@ -1,12 +1,12 @@
 ---
-title: "Agent：多智能体协作（Part 3/4）"
-excerpt: '分布式与多智能体'
+title: "RobotAgent：多机智能体协作（Part 3/5）"
+excerpt: '分布式与多机智能体'
 
 collection: theory
-category: 
-permalink: /theory/agent/mas
+category: robotagent
+permalink: /theory/robotagent/mas
 tags: 
-  - agent
+  - robotagent
 
 layout: single
 read_time: true
@@ -16,9 +16,11 @@ share: true
 related: true
 ---
 
+![](../../images/theory/robotagent/a2a.png)
+
 ## MAS协作
 
-多agent系统（MAS）利用群体智慧，采用结构化的`工作流`、定义的`协作规范`和统一的`交互协议`来同步他们的行动以实现协作目标。
+多agent系统（MAS）适用于RobotAgent的多机智能体协作，利用群体智慧，采用结构化的`工作流`、定义的`协作规范`和统一的`交互协议`来同步他们的行动以实现协作目标。
 
 ### 一、工作流
 

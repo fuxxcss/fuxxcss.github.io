@@ -1,6 +1,6 @@
 ---
-title: "漏洞：补丁（Part 2/3）"
-excerpt: '修复与防御'
+title: "RobotAgent漏洞：补丁模式（Part 2/3）"
+excerpt: '漏洞的修复'
 
 collection: theory
 category: sec
@@ -26,6 +26,8 @@ related: true
 使用diff命令对源文件作前后对比，利用1day漏洞
 
 ## 补丁模式
+
+### 一、代码漏洞补丁
 
 通过对CVEs的漏洞修复源码比对，可以找出其修补漏洞的共通模式，三种通用的修复模式如下：
 1. 条件终止(ABORT)

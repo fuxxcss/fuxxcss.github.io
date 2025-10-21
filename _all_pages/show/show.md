@@ -10,14 +10,13 @@ author_profile: true
 ## 中国网安协会 开源安全计划 三等奖
 
 参赛赛道： 开源软件重写<br>
-参赛作品： 安全特性检测工具checksecc
+参赛作品： checksecc
 
 ---
 
-## CCF T2 共一
+## CCF 论文 
 
-期刊： 计算机科学<br>
-题目： 基于黑盒插桩的闭源数据库管理系统的模糊测试技术研究
+- 《Research on Fuzz Testing Technology of Closed-source Database Management System Based on Black-box Instrumentation》
 
 
 

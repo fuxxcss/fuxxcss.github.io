@@ -86,15 +86,15 @@ practice_category:
   '101':
     title: '101'
   focus:
-    title: '数据安全'
+    title: 'RobotAgent & Sec'
 
 theory_category:
   basic:
     title: '基础'
-  db:
-    title: '数据库'
-  test:
-    title: '测试'
+  robotagent:
+    title: '机器人智能体'
+  sec:
+    title: '安全'
 
 
 # These settings control the types of collections used by the template
