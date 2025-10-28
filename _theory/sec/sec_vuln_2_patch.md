@@ -1,6 +1,6 @@
 ---
-title: "RobotAgent漏洞：补丁模式（Part 2/3）"
-excerpt: '漏洞的修复'
+title: "RobotAgent漏洞：补丁（Part 2/3）"
+excerpt: '漏洞的修复方案'
 
 collection: theory
 category: sec

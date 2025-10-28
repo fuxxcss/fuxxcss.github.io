@@ -17,7 +17,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/basic/abstract.png)
+![](../../images/theory/basic/design/abstract.png)
 
 ### 创建型模式
 

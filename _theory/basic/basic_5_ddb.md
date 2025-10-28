@@ -17,7 +17,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/basic/cap.png)
+![](../../images/theory/basic/ddb/cap.png)
 
 ## 数据库的定义
 

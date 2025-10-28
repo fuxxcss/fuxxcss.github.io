@@ -4,7 +4,7 @@ excerpt: 'google'
 
 collection: theory
 category: robotagent
-permalink: /theory/robotagent/samples
+permalink: /theory/robotagent/examples
 tags: 
   - robotagent
 
@@ -16,7 +16,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/robotagent/adk.png)
+![](../../images/theory/robotagent/examples/adk.png)
 
 ## agent实例
 

@@ -1,6 +1,6 @@
 ---
-title: "编程语言：八股文（Part 1/1）"
-excerpt: 'Python、Golang'
+title: "编程语言：八股文（Part 2/2）"
+excerpt: '包管理、底层实现与高级特性等'
 
 collection: theory
 category: basic
@@ -130,6 +130,12 @@ related: true
 add = lambda x, y: x + y
 ```
 - 闭包是一个函数，在内部定义嵌套函数，将嵌套函数返回。
+
+## C++
+
+C++的优点：
+- 高性能矩阵计算
+- 硬件级别优化
 
 ## Golang
 
@@ -367,3 +373,4 @@ type Map struct {
 **1.对于匿名函数、闭包的理解？**
 - 匿名函数，常与go关键字合用，立即并发执行；或者作为回调函数。
 - 闭包是一个函数，在内部定义嵌套函数，将嵌套函数返回。
+

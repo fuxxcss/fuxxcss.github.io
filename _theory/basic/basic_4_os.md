@@ -18,7 +18,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/basic/xv6.png)
+![](../../images/theory/basic/os/xv6.png)
 
 ### xv6
 

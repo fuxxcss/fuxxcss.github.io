@@ -16,7 +16,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/robotagent/transformer.png)
+![](../../images/theory/robotagent/parts/transformer.png)
 
 ## RobotAgent的组件
 
@@ -40,7 +40,7 @@ related: true
 5. 环境转变（T），环境对agent的行动做出反应，st+1 = T(st, a′t)。
 6. （多智能体场景中）每个智能体 i 维护各自的状态（M it、a it、o it），并且环境根据所有智能体的动作进行集体更新。
 ```
-![](../../images/theory/robotagent/io.png)
+![](../../images/theory/robotagent/parts/io.png)
 
 RobotAgent实现自我行动的关键在于，通过上述四个模块的协作，RobotAgent能够通过与环境的交互和自我反思（强化学习），持续学习（模型的训练）确保决策的不断改进，最终实现准确的行动。
 
@@ -154,7 +154,7 @@ RobotAgent实现自我行动的关键在于，通过上述四个模块的协作�
 - 记忆缓冲区，缓存短期的工作记忆。
 - 矢量数据库，存储长期记忆。
 
-![](../../images/theory/robotagent/memory.png)
+![](../../images/theory/robotagent/parts/memory.png)
 
 记忆的生命周期：
 1. 保留
@@ -180,7 +180,7 @@ RobotAgent从环境中获取文本，视觉、听觉、触觉等多模态数据�
 
 系统的核心是建立与环境的交互，这包括生成自然语言、执行代码、控制机器人肢体、在虚拟世界中导航等。将认知核心的决策转化为具体的、可在环境中执行的操作序列，然后通过预定义的奖励函数从收集的动作轨迹中实现学习过程。
 
-![](../../images/theory/robotagent/action.png)
+![](../../images/theory/robotagent/parts/action.png)
 
 ```
 数学模型：

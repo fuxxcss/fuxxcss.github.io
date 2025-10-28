@@ -16,7 +16,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/robotagent/brain.png)
+![](../../images/theory/robotagent/view/brain.png)
 
 ## 前言
 

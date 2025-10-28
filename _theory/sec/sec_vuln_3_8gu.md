@@ -1,6 +1,6 @@
 ---
 title: "RobotAgent漏洞：八股文（Part 3/3）"
-excerpt: '漏洞防御的八股文'
+excerpt: '漏洞相关的八股文'
 
 collection: theory
 category: sec

@@ -16,7 +16,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/robotagent/a2a.png)
+![](../../images/theory/robotagent/mas/a2a.png)
 
 ## MAS协作
 

@@ -18,7 +18,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/basic/coffee_lake.png)
+![](../../images/theory/basic/arch/coffee_lake.png)
 
 ### 计算机系统
 
