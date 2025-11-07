@@ -1,10 +1,10 @@
 ---
-title: "静态漏洞挖掘：joern代码分析平台 （Part 2/3）"
-excerpt: '代码分析自动化'
+title: "静态漏洞挖掘：代码分析平台 （Part 2/3）"
+excerpt: 'Joern，CodeQL 代码分析自动化'
 
 collection: theory
 category: sec
-permalink: /theory/sec/sast-joern
+permalink: /theory/sec/sast-tools
 tags: 
   - code audit
   - sast
@@ -29,7 +29,7 @@ https://elmanto.github.io/posts/sast_derby_joern_vs_codeql
 
 joern除了能够分析源代码，还能够分析编译后的字节码、二进制码。
 
-**超高度**适配的语言：
+**极度**适配的语言：
 - C/C++，基于Eclipse CDT
 - Java，基于JavaParser
 
@@ -300,4 +300,24 @@ call.argument(1)
 运行脚本
 joern> import $file.mytools // import your script
 joern> mytools.buffer_overflows(cpg) // run the script from within Joern Shell!
+
+或者外部脚本的形式：
+
+保存到 /home/$USER/bin/joern/buffer_overflows.sc 中：
+@main def execute(graph: String) = {
+  open(graph)
+  println("Finding possible buffer overflows")
+  def src = cpg.call("malloc").where(_.argument(1).isCallTo(Operators.addition)).l
+  cpg.call("memcpy").where { call =>
+  call.argument(1)
+    .reachableBy(src)
+  }.code.l
+}
+
+您可以使用importCode（）等其他命令替换open（图）来处理新代码。你也可以生成json，创建报告等等。
+
+在外部运行：
+$ joern --script buffer_overflows.sc --params graph=vlc-3.0.12
+
+
 

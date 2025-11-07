@@ -8,6 +8,8 @@ permalink: /theory/basic/code-style
 tags: 
   - 8gu
   - python
+  - cpp
+  - golang
 
 layout: single
 read_time: true

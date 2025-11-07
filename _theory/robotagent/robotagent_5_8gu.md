@@ -26,6 +26,7 @@ https://www.iguopin.com/job/detail?id=162661896695057286
 https://careers.tencent.com/jobdesc.html?postId=1968241074312990720
 https://app.mokahr.com/campus-recruitment/chaitin/92701#/job/41c646e6-ad12-4e70-b827-fb1820749424
 https://www.inhand.com.cn/job/2026%e5%b1%8a%e6%a0%a1%e6%8b%9b-%e6%9c%ba%e5%99%a8%e4%ba%ba%e6%93%8d%e4%bd%9c%e6%8e%a7%e5%88%b6%e7%ae%97%e6%b3%95%e5%b7%a5%e7%a8%8b%e5%b8%88/
+https://ubtrobot.zhiye.com/campus/detail?jobAdId=3f58a637-46ab-421b-a3af-3745de4b1041
 
 **2.agent开发、算法**
 

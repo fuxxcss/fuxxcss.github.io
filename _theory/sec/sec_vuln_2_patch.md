@@ -51,3 +51,5 @@ related: true
 特点是增加一个新的if语句，对程序涉及的变量进行检查，满足条件则进行赋值。如下图CVE-2013-0211的漏洞修复。
 
 ![](../../images/theory/sec/patch/CVE-2013-0211.png)
+
+针对RobotAgent安全提出方案

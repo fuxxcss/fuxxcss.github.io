@@ -1,14 +1,15 @@
 ---
 title: "编程语言：八股文（Part 2/2）"
-excerpt: '包管理、底层实现与高级特性等'
+excerpt: 'Python，C++，Go的包管理、底层实现与高级特性等'
 
 collection: theory
 category: basic
 permalink: /theory/basic/code-8gu
 tags: 
   - 8gu
-  - go
+  - cpp
   - python
+  - golang
 
 layout: single
 read_time: true

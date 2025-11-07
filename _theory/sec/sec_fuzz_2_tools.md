@@ -1,10 +1,10 @@
 ---
-title: "动态漏洞挖掘：AFL(++)模糊测试框架 （Part 2/3）"
-excerpt: '边覆盖率反馈的工作原理'
+title: "动态漏洞挖掘：模糊测试框架 （Part 2/3）"
+excerpt: 'AFL(++)，Honggfuzz 边覆盖率反馈的工作原理'
 
 collection: theory
 category: sec
-permalink: /theory/sec/fuzz-afl
+permalink: /theory/sec/fuzz-tools
 tags: 
   - fuzz
 
