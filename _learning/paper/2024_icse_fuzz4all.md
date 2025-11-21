@@ -18,7 +18,7 @@ share: true
 related: true
 ---
 
-![](../images/learning/2024_icse_fuzz4all/1.png)
+![](../images/learning/2024_icse_fuzz4all/cover.png)
  
 ## 简介
 
@@ -54,7 +54,8 @@ LLM是经过数十亿代码训练的，LLM高度理解编程语言的语义和�
 ## 实现
 
 Fuzz4All的整体框架如下图所示，实现有两大组成部分：自动提示引擎、测试循环。
-![](../images/learning/2024_icse_fuzz4all/2.png)
+
+![](../images/learning/2024_icse_fuzz4all/fuzz4all.png)
 
 ### 一、自动提示引擎
 
@@ -69,7 +70,9 @@ Fuzz4All的整体框架如下图所示，实现有两大组成部分：自动提
 ### 三、提示词更新策略
 
 在测试循环中，迭代测试的关键是三个更新策略，它可以保证LLM不断生成高质量的测试用例。下图是应用三个更新策略的例子。
-![](../images/learning/2024_icse_fuzz4all/3.png)
+
+![](../images/learning/2024_icse_fuzz4all/mutate.png)
+
 1. 基于生成，主要用于初始提示词。对LLM说“*请为SMT求解器创建一个使用复杂逻辑的程序。*”
 2. 基于变异，用于迭代测试，生成高质量测试用例。对LLM说“*请修改前一个输入，创建一个变异后的输入。*”
 3. 语义相同，可以进一步提高覆盖率。对LLM说“*请创建一个语义上等价于上一个的输入。*”
@@ -89,22 +92,28 @@ LoC方面Fuzz4All有巨大的优势，由于工作重心在提示词和LLM上，
 5. 三个评估标准，代码覆盖率、命中率、bug数量。
 
 ### 二、实验对象
+
 实验涉及六种编程语言（C、C++、Go、SMT、Java和Python）和九个对象（如GCC、Clang、Z3等）。
-![](../images/learning/2024_icse_fuzz4all/4.png)
+
+![](../images/learning/2024_icse_fuzz4all/env.png)
 
 ### 三、实验评估
 
 在命中率方面，fuzz4all普遍低于基线工具，然而在相同的测试时间内（24小时），覆盖率却高于基线工具。说明fuzz4all更符合模糊测试的目的，命中率本质上是为覆盖率服务的，LLM以低命中率实现了高覆盖率，表明fuzz4all的有效用例具有很高的质量。
-![](../images/learning/2024_icse_fuzz4all/5.png)
+![](../images/learning/2024_icse_fuzz4all/compare.png)
 
 ### 四、实验结果
 
 fuzz4all总共复现、新发现了98个漏洞，其中包括64个未知漏洞，每个漏洞都向项目提交了issue。
-![](../images/learning/2024_icse_fuzz4all/6.png)
+
+![](../images/learning/2024_icse_fuzz4all/total.png)
 
 ### 五、实例
 
 fuzz4all向go提交了一个[段错误](https://github.com/golang/go/issues/61158)，该漏洞发生在runtime模块的ReadMemStats函数中，向该函数传递参数nil会触发runtime的段错误，而不是runtime处理的panic。
-![](../images/learning/2024_icse_fuzz4all/7.png)
+
+![](../images/learning/2024_icse_fuzz4all/vuln.png)
+
 对ReadMemStats函数打补丁，检测nil。
-![](../images/learning/2024_icse_fuzz4all/8.png)
+
+![](../images/learning/2024_icse_fuzz4all/patch.png)

@@ -18,7 +18,7 @@ share: true
 related: true
 ---
 
-![](../images/learning/2022_icra_rozz/1.png)
+![](../images/learning/2022_icra_rozz/cover.png)
 
 ## ROZZ的挑战
 
@@ -30,7 +30,8 @@ ROS程序的测试需求：
 
 ROS架构：
 从ROS1到ROS2，ROS实现了去中心化的架构设计。
-![](../images/learning/2022_icra_rozz/2.png)
+
+![](../images/learning/2022_icra_rozz/ros.png)
 
 ### 二、模糊测试在ROS程序中的挑战
 
@@ -50,27 +51,33 @@ ROZZ从三个维度生成测试用例，作为输入同时作用于目标ROS节�
 1. 用户数据：来自GUI，命令行，ROS服务。
 2. 配置参数：从特定的配置文件中读取，对机器人进行配置，如最大移动速度和最小旋转角度。
 3. 传感器信息：从各种传感器，如激光雷达生成的消息。
-![](../images/learning/2022_icra_rozz/3.png)
+
+![](../images/learning/2022_icra_rozz/multi_dimensional.png)
 
 ### 二、分布式分支覆盖统计
 
 针对ROS程序的分布式节点模型，ROZZ提出了一种分布式分支覆盖方法，用于描述多个ROS节点在机器人任务中的整体代码覆盖率。
-![](../images/learning/2022_icra_rozz/4.png)
+
+![](../images/learning/2022_icra_rozz/distributed_nodes.png)
 
 ### 三、时序变异策略
 
 针对ROS程序输入的时序特性，ROZZ设计了一种时序变异策略，通过改变传感器消息序列的顺序来生成具有时序信息的测试用例。
-![](../images/learning/2022_icra_rozz/5.png)
+
+![](../images/learning/2022_icra_rozz/interceptor.png)
+
 时序变异策略提供了三种可用的时间变异模式，以模拟通信不稳定的情况：
 1. 消息丢弃
 2. 消息重发
 3. 消息重排序
-![](../images/learning/2022_icra_rozz/6.png)
+![](../images/learning/2022_icra_rozz/temporal.png)
 
 ### 四、ROZZ的设计与实现
 
 使用Clang9.0，对被测的ROS程序的LLVM字节码进行代码插桩和动态分析，其架构包括代码分析器、信息分析器、节点监控器和漏洞检查器。
-![](../images/learning/2022_icra_rozz/7.png)
+
+![](../images/learning/2022_icra_rozz/rozz.png)
+
 ROZZ的工作流程：
 1. ROZZ通过代码分析器对ROS程序进行代码插桩，生成可执行的ROS节点。
 2. 节点监控器执行插桩代码，收集每个ROS节点覆盖的代码分支，并计算分布式分支覆盖。
@@ -84,7 +91,8 @@ ROZZ的工作流程：
 
 **虚拟环境：**
 使用Gazebo 11.5仿真平台，模拟机器人TurtleBot3 Waffle，配备激光雷达、里程计、IMU和2D摄像头等传感器，以复现真实场景。
-![](../images/learning/2022_icra_rozz/8.png)
+
+![](../images/learning/2022_icra_rozz/env.png)
 
 **漏洞类型：**
 内存漏洞，空指针解引用（6）、释放后使用（5）、缓冲区溢出（3）、无效指针访问（11）。
@@ -94,11 +102,13 @@ ROZZ的工作流程：
 并发问题，5个UAF漏洞由数据竞争引发（如线程A释放内存后，线程B仍尝试访问）。
 未验证输入，11个漏洞发生在程序初始化阶段，例如未校验用户输入的无效参数。
 第三方依赖，7个漏洞源自ROS核心组件（如rclcpp）或库（如OpenCV）。
-![](../images/learning/2022_icra_rozz/9.png)
+
+![](../images/learning/2022_icra_rozz/vuln_class.png)
 
 **漏洞样例：**
 UAF（a）发生在并发处理中，未捕获异常（b）逻辑未对隐式异常进行处理，栈越界（c）同样发生在并发处理中。
-![](../images/learning/2022_icra_rozz/10.png)
+
+![](../images/learning/2022_icra_rozz/example.png)
 
 ## 总结
 

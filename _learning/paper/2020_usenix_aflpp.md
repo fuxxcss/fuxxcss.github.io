@@ -17,7 +17,7 @@ share: true
 related: true
 ---
 
-![](../images/learning/2020_usenix_aflpp/1.png)
+![](../images/learning/2020_usenix_aflpp/cover.png)
 
 ## SOTA
 
@@ -33,7 +33,8 @@ AFL的覆盖率反馈是一种混合度量，混合了边覆盖率与一次运�
 1，2，3，4-7，8-15，16-31，32-127，128+。
 如果一个输入执行的边以一个新桶来统计，则被认为是interesting的，保存到队列中。这些桶或称命中计数(hitcount)在执行期间被记录到一个共享位图(bitmap)中，其中每个字节代表一个边的计数。
 由于AFL位图的大小是有限的(64KB)，所以当一个程序的边数大于2^16时会发生碰撞，同时由于统计边时的映射方式同样可能存在碰撞。
-![](../images/learning/2020_usenix_aflpp/2.png)
+
+![](../images/learning/2020_usenix_aflpp/afl_store.png)
 
 __afl_store代码段将代表该桩的随机数rcx与上一个桩的随机数__afl_prev_loc异或运算存入rcx，当前桩的随机数右移1位(目的是对于A->B、B->A这种情况，可以将A->B和B->A区分出来)赋值到新的__afl_prev_loc，*[__afl_area_ptr+rcx]是在位图中将该边的计数加0x01。adc指令将CF上的进位值也相加，达到NeverZero的目的。
 最后，AFL中当有新的边 (BB->BB)出现或记录的边出现新的命中桶则视为产生新状态。每次执行程序后，对比位图有无产生新状态来决定是否保存测试用例。
@@ -48,18 +49,21 @@ __afl_store代码段将代表该桩的随机数rcx与上一个桩的随机数__a
 3. 拼接splicing
 
 AFL可能会将两个测试用例合并为一个，并执行破坏性变异。
-![](../images/learning/2020_usenix_aflpp/3.png)
+
+![](../images/learning/2020_usenix_aflpp/mutation.png)
 
 **3.forkserver**
 
 为了避免execve()的开销，AFL使用了forkserver。AFL把通过进程间通信机制IPC控制的forkserver插桩到目标中。每当AFL需要执行一个测试用例时，它就会写入输入，然后告诉目标进行fork，子进程将执行测试用例，父进程阻塞等待。forkserver稍后继续在目标中fork。在这种方案下，AFL不需要每次调用execve()浪费昂贵的初始化和启动进程时间。
 afl将一个循环__afl_fork_wait_loop插桩到目标中，每当AFL需要执行一个测试用例时，由afl-fuzz控制forkserver调用fork，子进程进行模糊测试的覆盖率统计，父进程阻塞等待。
-![](../images/learning/2020_usenix_aflpp/4.png)
+
+![](../images/learning/2020_usenix_aflpp/afl_fork_wait_loop.png)
 
 **4.持久模式**
 
 正常情况下，对于每一个测试用例，都会fork()出一个新的目标进程进行处理，而大量fork()无疑会带来大量开销。为此，将一个loop patch到测试目标中，每次fork()得到的进程，会对一批而非单个测试用例进行处理，从而减少了开销，提高了执行速度。
-![](../images/learning/2020_usenix_aflpp/5.png)
+
+![](../images/learning/2020_usenix_aflpp/afl_loop.png)
 
 使用宏定义__AFL_LOOP(NUM)来决定单进程处理多少测试用例。需要注意的是每次fuzz过程都会改变一些进程或线程的状态变量，因此，在复用这个fuzz子进程的时候需要将这些变量恢复成初始状态。
 
@@ -91,25 +95,31 @@ LAF-intel列出了针对多字节困难比较、字符串比较两种情况的�
 
 **针对多字节困难比较：**
 对于左图这样的代码，只有当变量input的值等于0xabad1dea时，才会执行bug代码。每当AFL生成一个不符合的输入，都不会使覆盖率产生变化，即使输入是几乎正确的0xabad1deb，也不会产生有作用的反馈。
-![](../images/learning/2020_usenix_aflpp/6.png)
+
+![](../images/learning/2020_usenix_aflpp/laf_bytes.png)
 
 如果像右图这样将其以单字节拆分，相比之前的四字节比较容易产生新的边，便可以引导AFL生成正确的输入，进而探索到bug代码。
 
 **同理，针对字符串比较：**
 调用了strcmp函数的左图，可修改为单字符比较的右图。
-![](../images/learning/2020_usenix_aflpp/7.png)
+
+![](../images/learning/2020_usenix_aflpp/laf_string.png)
 
 **2.RedQueen**
 
 REDQUEEN在KAFL的基础上，探索了绕过困难比较和(嵌套)校验和检查的方案，但不使用诸如污点跟踪或符号执行之类的昂贵技术。该模糊测试方案专注于Input-to-State（I2S）的比较，这是一种与至少一个操作数中的输入直接相关的比较类型。作者表明，许多障碍都是这种类型的，并开发了一种定位和绕过它们的技术。
 I2S关联的例子如下图所示。对cmp指令进行hook，运行指令时可以观察到eax的值为VALU，0x44434241则为ABCD(均为小端序)。
-![](../images/learning/2020_usenix_aflpp/8.png)
+
+![](../images/learning/2020_usenix_aflpp/redqueen.png)
+
 input中同样有VALU出现，由此推断：如果将输入中的VALU替换为ABCD，就有较大可能绕过这个障碍。
 
 ## AFL++
 
 除了集成并优化智能调度、绕过障碍方面的研究成果之外，AFL++相比于AFL还有更多有用的功能。
+
 ### 一、定制变异器API
+
 AFL++可以很容易地在新的模糊测试场景中进行扩展，适用于发现指定目标的漏洞。定制变异器允许模糊测试研究在AFL++之上构建新的调度、突变和修剪，而无需对AFL进行fork、patch，就像当前的许多工具一样。
 
 对此的支持最初是在Holler fork的AFL中独立开发的，但后来得到了扩展，具有许多新功能。插件可以用C/C++编写，也可以用Python进行原型化。
@@ -119,6 +129,7 @@ AFL++可以很容易地在新的模糊测试场景中进行扩展，适用于发
 export AFL_CUSTOM_MUTATOR_ONLY=1
 export AFL_CUSTOM_MUTATOR_LIBRARY="/path/to/libmutator.so"
 ```
+
 ### 二、插桩相关
 
 **1.NeverZero**
@@ -153,7 +164,8 @@ LLVM是编译器后端，常搭配clang使用，若想使用LLVM模式，需要�
 有两种主要方法可以实现QEMU模式的Persistent模式：
 1. 循环一个函数：用户指定一个函数的地址，模糊器会自动在while(__AFL_LOOP(NUM))循环中使用该函数，修改其返回地址。该地址也可以不是函数的第一条指令，但是在这种配置下，用户必须提供栈上的偏移量，以正确定位要修改的返回地址。
 2. 指定入口点和出口点：用户可以指定循环的第一条指令和最后一条指令的地址，QEMU将在运行时修改代码以在这些地址之间生成循环；
-![](../images/learning/2020_usenix_aflpp/9.png)
+
+![](../images/learning/2020_usenix_aflpp/modes.png)
 
 **3.RetroWrite**
 
