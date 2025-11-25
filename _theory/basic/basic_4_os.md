@@ -20,13 +20,13 @@ related: true
 
 ![](../../images/theory/basic/os/xv6.png)
 
-### xv6
+## xv6
 
 操作系统需要实现启动引导、进程管理、系统调用、文件系统等功能，存储在外存中，当启动引导配置完毕后，将正式接管硬件并向用户提供一个交互接口。
 
 ![](../../images/theory/basic/os/source.png)
 
-xv6是MIT开发的用于教学的类UNIX操作系统，拥有完整的启动引导、文件系统、内核，支持多处理器，还包括一些提供给用户的sh程序。
+xv6是MIT开发的[^1][^2]用于教学的类UNIX操作系统，拥有完整的启动引导、文件系统、内核，支持多处理器，还包括一些提供给用户的sh程序。
 
 在xv6 Makefile中，以下规则制作了一个xv6.img，存储着xv6的bootloader和kernel。
 
@@ -106,11 +106,11 @@ qemu: fs.img xv6.img
 	$(QEMU) -serial mon:stdio $(QEMUOPTS)
 ```
 
-### 启动引导
+## 启动引导
 
 xv6的启动过程有三个阶段：引导阶段、内核阶段和内核主函数阶段
 
-### 1.引导阶段
+### 一、引导阶段
 
 引导处理器BP运行BIOS将bootblock加载到固定物理地址0x7c00处；运行bootasm.S从实模式进入32位保护模式；bootblock中bootmain.c加载内核elf到固定物理地址0x100000处，然后转入内核入口点_start即elf->entry运行。
 
@@ -147,7 +147,7 @@ void bootmain(void) {
   entry();
 }
 ```
-### 2.内核阶段
+### 二、内核阶段
 
 entry通过操作CR0、CR3、CR4寄存器开启分页，设置临时页表entrypgdir，4MB大小；建立内核栈，esp指向0x2000；转到主函数main。
 ``` x86asm
@@ -198,7 +198,7 @@ pde_t entrypgdir[NPDENTRIES] = {
   [KERNBASE>>PDXSHIFT] = (0) | PTE_P | PTE_W | PTE_PS,
 };
 ```
-### 3.内核主函数阶段
+### 三、内核主函数阶段
 
 此时已经开启分页，进行各种初始化工作。
 ``` c
@@ -231,7 +231,7 @@ int main(void) {
 }
 ```
 
-**3.1 cpu结构体初始化**
+#### 1.cpu结构体初始化
 
 cpu结构体的初始化发生在整个main函数中。
 
@@ -258,7 +258,7 @@ xv6支持多处理器工作，cpu结构体被内核管理在数组cpus中，最�
 struct cpu cpus[NCPU];
 ```
 
-**3.2 全局描述符表GDT和任务状态段描述符TSS初始化**
+#### 2.全局描述符表GDT和任务状态段描述符TSS初始化
 
 GDT中需要存储两种描述符：存储段描述符和任务状态段描述符TSS。xv6中GDT数组有5个描述符，对应段选择子中的Index：
 ``` c
@@ -321,7 +321,7 @@ void switchuvm(struct proc *p)
 }
 ```
 
-**3.3 进程表初始化**
+#### 3.进程表初始化
 
 进程表ptable结构体包含一个自旋锁、大小64的进程PCB数组。
 ``` c
@@ -341,7 +341,7 @@ void pinit(void) {
 }
 ```
 
-**3.4 启动cpu**
+#### 4. 启动cpu
 
 BP和AP都需要调用mpmain()完成CPU的启动，配置中断向量表IDT，将cpu状态设置为started，调用scheduler()进入调度死循环，因为前一行userinit()建立了初始进程init，调度进程会切换到初始进程init开始执行。
 
@@ -355,13 +355,13 @@ static void mpmain(void) {
 }
 ```
 
-### 内核
+## 内核
 
 xv6内核是宏内核，主要有5个核心功能：中断处理、进程管理、内存管理、锁机制和硬件驱动。
 
-### 1.中断处理
+### 一、中断处理
 
-**1.1 基本数据结构和定义**
+#### 1. 基本数据结构和定义
 
 对应IA-32门描述符的结构，构造结构体gatedesc(mmu.h)。其中type字段用来区分中断STS_IG32和陷入STS_TG32两种类型。
 
@@ -485,7 +485,7 @@ struct trapframe {
 
 陷阱帧是为了保存被中断进程的执行状态，在中断处理过程由CPU、vector n和alltraps共同在栈上构建，保存现场。
 
-**1.2 IDT初始化**
+#### 2.IDT初始化
 
 在内核main()函数阶段，首先调用tvinit()初始化IDT，IDT各项门描述符中的段选择子设置为SEG_KCODE<<3，根据段选择子结构可知，Index=SEG_KCODE，TI=0，DPL=GDT[SEG_KCODE].DPL=0。
 
@@ -507,11 +507,11 @@ void tvinit(void) {
 
 然后在mpmain()中会调用idtinit()加载IDT到idtr寄存器上，完成IDT的配置。
 
-**1.3 中断响应、处理和返回**
+#### 3.中断响应、处理和返回
 
 中断可能由硬件发起，CPU从总线读入中断号；可能由CPU一些异常发起，CPU自己产生中断号；或者用户使用了系统调用，中断号为64。
 
-**中断响应过程如下(CPU执行)：**
+**3.1 中断响应过程如下(CPU执行)：**
 1. 根据中断号n，从IDT获取第n个门描述符
 2. 如果中断由int指令触发，CPU额外检查CS.CPL<=门描述符.DPL(避免应用程序使用硬件设备的中断号)，进一步检查CS.CPL>段描述符.DPL，表示发生了特权级转换：为了系统安全，内核不能使用用户栈，所以下一步切换到内核栈。
    
@@ -526,7 +526,7 @@ void tvinit(void) {
 8. 设置CS为描述符中的值，提升权限到ring 0
 9.  设置EIP为描述符中的值，转入中断处理程序
 
-**中断处理过程如下(xv6代码执行)：**
+**3.2 中断处理过程如下(xv6代码执行)：**
 
 跳转到vector n后(vectors.S)，错误码0入栈(可选)，中断号入栈，跳转到alltraps(trapasm.S)统一中断处理程序执行，搭配CPU和vector n在当前栈上构建trapframe，设置DS和ES，将trapframe指针即esp作为传入参数入栈，跳转执行trap函数(trap.c)。
 ``` x86asm
@@ -579,7 +579,7 @@ int sys_kill(void) {
 ```
 2. tf->trapno == T_IRQ0+IRQ_*，转而执行硬件中断(时钟中断、IDE中断、键盘中断、串口1中断)的处理函数。以键盘中断为例，调用kbdintr中断处理函数，调用lapiceoi中断应答。
 
-**中断返回过程如下：**
+**3.3 中断返回过程如下：**
 
 从trap函数返回后，清除传参，继续执行trapret函数，使用pop和iret指令恢复寄存器。
 ``` x86asm
@@ -593,9 +593,9 @@ trapret:
   iret
 ```
 
-### 2.进程管理
+### 二、进程管理
 
-**2.1 基本数据结构和定义**
+#### 1.基本数据结构和定义
 
 xv6进程由两部分组成：
 1. 用户内存空间，包含指令、数据和栈。
@@ -650,7 +650,7 @@ enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
 5. 睡眠态SLEEPING，进程在等待IO、子进程、外部中断等原因正在睡眠，由sleep函数进入，由wakeup函数唤醒。
 6. 僵尸态ZOMBIE，进程已经退出但是还在内存中。
 
-**2.2 进程的切换和调度**
+#### 2.进程的切换和调度
 
 进程切换函数swtch是进程调度的核心函数，swtch函数(swtch.S)完成当前进程(nproc)到目标进程(tproc)的切换。nproc调用swtch函数，参数1指向nproc->context的地址，参数2指向tproc->context。于是nproc->context.eip先入栈，ebp、ebx等入栈，切换栈，nproc->context=esp，esp=tproc->context，将上下文依次修改为tproc的上下文。
 
@@ -745,7 +745,7 @@ void sched(void) {
 }
 ```
 
-**2.3 初始进程**
+#### 3.初始进程
 
 首先，了解进程分配allocproc函数(proc.c)的工作原理：
 ``` c
@@ -903,7 +903,7 @@ int main(void) {
 }
 ```
 
-**2.4 管道**
+#### 4.管道
 
 管道是重要的进程间通信方式，它是一个固定大小的FIFO的内核缓冲区，以文件描述符对的形式提供给进程，一端读，一端写。文件结构体file中有字段指向pipe，对FD_PIPE类型文件的操作就是对pipe的操作。
 
@@ -926,9 +926,9 @@ struct pipe {
 
 ![](../../images/theory/basic/os/pipe.png)
 
-### 3.内存管理
+### 三、内存管理
 
-**3.1 页表结构和标志**
+#### 1.页表结构和标志
 
 首先xv6对内存布局定义了几个重要参数，内核空间的虚拟地址KERNBASE=0x80000000，2GB；内核的虚拟地址KERNLINK=0x80100000；由xv6启动引导可知0x100000空间内保存着bios、bootblock和IO空间；最大物理内存定义为0xE000000，MMIO类型的设备地址从0xFE000000开始。
 
@@ -943,7 +943,7 @@ struct pipe {
 #define KERNLINK (KERNBASE+EXTMEM)  // Address where kernel is linked
 ```
 
-**一级页表结构阶段：**
+**1.1 一级页表结构阶段：**
 
 在前文中的内核entry函数中，采用一级页表结构，高10位是页表索引，低22位是偏移，建立临时页表entrypgdir(main.c)，定义为uint数组，容纳1024个表项。其中初始化了两项映射：
 - VA[0，4MB] -> PA[0，4MB]，
@@ -959,7 +959,7 @@ struct pipe {
 #define P2V_WO(x) ((x) + KERNBASE)    // same as P2V, but without casts
 ```
 
-**二级页表结构阶段：**
+**1.2 二级页表结构阶段：**
 
 后续main函数调用kvmalloc后，xv6重新初始化内存管理，采用二级页表结构管理内存(mmu.h)，32位虚拟内存地址中，10位页目录索引，10位页表索引，，12位偏移即每页大小PGSIZE=4KB。
 
@@ -992,7 +992,7 @@ struct pipe {
 ```
 2. 由此计算出物理地址PA=p | o。
 
-**页目录、页表标志：**
+**1.3 页目录、页表标志：**
 
 对应于x86 MMU硬件机制，标志有可见性、写保护、用户空间、页大小。
 ``` c
@@ -1002,7 +1002,7 @@ struct pipe {
 #define PTE_U           0x004   // User
 #define PTE_PS          0x080   // Page Size
 ```
-**3.2 虚拟地址空间映射**
+#### 2.虚拟地址空间映射
 
 xv6每个进程虚拟空间地址0~4GB，可以划分成三个部分：
 1. 0~KERNBASE(2GB)，用户空间虚拟地址范围。
@@ -1013,7 +1013,7 @@ xv6每个进程虚拟空间地址0~4GB，可以划分成三个部分：
 
 ![](../../images/theory/basic/os/vm.png)
 
-**3.3 内存空间初始化**
+#### 3.内存空间初始化
 
 首先，setupkvm函数用来创建一个进程的内核空间，首先调用kalloc分配一页，存储页目录，调用mappages完成kmap[]描述的内核空间映射。调度进程和用户进程内存空间的创建都调用了该函数。
 
@@ -1080,7 +1080,7 @@ VA[0， 4KB] -> PA[V2P(mem)，V2P(mem)+4KB]
 容易混淆的地方是：
 物理地址[kernel.end, PHYSTOP]空闲表在kmem中是虚拟地址，在kpgdir中索引其物理地址等价于V2P。
 
-**3.4 内存空间切换**
+#### 4.内存空间切换
 
 在BP处理器(当前)上调用switchkvm完成切换，通过赋值cr3寄存器为内核页表kpgdir，切换到调度进程内存空间。
 ``` c
@@ -1093,13 +1093,13 @@ switchkvm(void)
 
 switchuvm函数负责切换到进程内存空间，除了赋值cr3寄存器，还需要为中断处理设置TSS结构体设置内核栈顶指针，GDT[SEG_TSS]，TSS段选择子赋值给tr寄存器。
 
-### 4.锁机制
+### 四、锁机制
 
 xv6支持多任务并发，因此需要互斥机制避免竞争。
 
-**4.1 自旋锁**
+#### 1.自旋锁
 
-**自旋锁结构体spinlock：**
+**1.1 自旋锁结构体spinlock：**
 
 locked保存锁的状态，初始为0，cpu保存持有锁的cpu，pcs[10]数组保存加锁者的调用栈。
 ``` c
@@ -1116,7 +1116,7 @@ struct spinlock {
 ```
 在需要互斥访问的结构体中，比如内存相关kmem、日志相关log等，都使用了自旋锁。自旋锁实现的核心是原子交换。
 
-**原子交换函数xchg()：**
+**1.2 原子交换函数xchg()：**
 
 使用了x86特殊指令lock;xchg。
 ``` c
@@ -1133,7 +1133,7 @@ static inline uint xchg(volatile uint *addr, uint newval) {
 }
 ```
 
-**持有锁状态检查：**
+**1.3 持有锁状态检查：**
 
 需要包裹在pushcli和popcli中。
 ``` c
@@ -1146,7 +1146,7 @@ int holding(struct spinlock *lock) {
 }
 ```
 
-**锁的获取和释放：**
+**1.4 锁的获取和释放：**
 
 获取锁，忙等。pushcli每执行一次，计数加1，如果加之前是0，则关中断。如果请求前已经获取了该锁，系统panic。
 ``` c
@@ -1194,7 +1194,7 @@ void release(struct spinlock *lk) {
 }
 ```
 
-**4.2 睡眠锁**
+#### 2.睡眠锁
 
 自旋锁是忙等的，请求锁的进程会占用大量睡眠锁被设计来避免该问题。睡眠锁结构体中，locked保存锁状态，lk自旋锁使得locked互斥。
 
@@ -1210,7 +1210,7 @@ struct sleeplock {
 };
 ```
 
-**持有锁状态检查：**
+**2.1 持有锁状态检查：**
 
 包裹在自旋锁的请求和释放中。
 
@@ -1225,7 +1225,7 @@ int holdingsleep(struct sleeplock *lk) {
 }
 ```
 
-**请求锁和释放锁：**
+**2.2 请求锁和释放锁：**
 
 请求锁，同样包裹在自旋锁的请求和释放中。如果睡眠锁被占有，调用proc.c中的sleep函数调度进程，释放自旋锁，其他进程即可检查和释放睡眠锁。
 
@@ -1251,9 +1251,9 @@ void releasesleep(struct sleeplock *lk) {
 }
 ```
 
-### 5.硬件驱动
+### 五、硬件驱动
 
-**5.1 I/O端口寻址**
+#### 1.I/O端口寻址
 
 对于数据端口、命令端口、状态端口的I/O编址，xv6有独立编址和统一编址两种。
 1. 独立编址模式使用x86保留的1KB I/O地址空间，如0x3C0~0x3CF分配给彩色CGA显示控制器。
@@ -1265,7 +1265,7 @@ void releasesleep(struct sleeplock *lk) {
 2)I/O APIC默认基地址0xFEC00000
 3)LAPIC默认基地址0xFEE00000
 
-**5.2 字符设备驱动**
+#### 2.字符设备驱动
 
 以字符设备驱动(键盘、串口、控制台)为例，中断控制器、定时器、块设备原理类似。
 
@@ -1333,22 +1333,22 @@ int kbdgetc(void) {
 }
 ```
 
-### 文件系统
+## 文件系统
 
 xv6将文件系统抽象为8层，本节仅关注上2层：
 1. 文件描述符层，将资源，管道、设备、磁盘文件抽象成文件。
 2. 系统调用层，将文件系统的功能封装成系统调用。
 
-### 1.文件描述符层
+### 一、文件描述符层
 
-**1.1 文件描述符**
+#### 1.文件描述符
 
 文件描述符是整数类型，它代表进程可以读写的内核对象，比如磁盘文件、设备、管道的一端，每个进程都有一个文件表struct file *ofile[NOFILE]，最多同时打开16个文件。
 文件描述符就是ofile的索引。
 
 按照惯例，0作为标准输入，1作为标准输出，2作为标准错误，这在init函数中实现，再通过创建sh子进程复制到每一个进程。
 
-**1.2 文件结构体**
+#### 2.文件结构体
 
 文件结构体file保存文件的属性，管道类型是FD_PIPE，设备和磁盘文件类型是FD_INODE。
 ``` c
@@ -1365,7 +1365,7 @@ struct file {
 ```
 在并发情况下，多个进程可能独立打开同一个i节点、管道指向的文件，off指示了各个进程在文件中的偏移。
 
-### 2.系统调用层
+### 二、系统调用层
 
 文件系统调用主要有以下类型：
 1. 文件指针复制dup
@@ -1373,3 +1373,6 @@ struct file {
 3. 链接和删除链接link、unlink
 4. 打开文件、创建目录和创建设备文件open、mkdir、mknod
 5. 改变目录、执行载入和管道chdir、exec、pipe 
+
+[^1]: xv6 https://pdos.csail.mit.edu/6.828/2025/xv6.html
+[^2]: UNIX xv6 内核源码深入剖析 https://pdos.csail.mit.edu/6.828/2025/xv6.html

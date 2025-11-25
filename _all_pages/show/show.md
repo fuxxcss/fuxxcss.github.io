@@ -16,7 +16,8 @@ author_profile: true
 
 ## CCF 论文 
 
-- 《Research on Fuzz Testing Technology of Closed-source Database Management System Based on Black-box Instrumentation》
+- T2 《Research on Fuzz Testing Technology of Closed-source Database Management System Based on Black-box Instrumentation》
+- T2 《Dependency graph repair based fuzzing framework for key-value database management system》
 
 
 

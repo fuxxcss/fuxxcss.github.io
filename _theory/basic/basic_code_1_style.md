@@ -1,6 +1,6 @@
 ---
-title: "编程语言：Google风格指南（Part 1/2）"
-excerpt: 'Python，C++，Go'
+title: "编程语言：风格指南（Part 1/2）"
+excerpt: 'Python，C++，Go 的Google风格'
 
 collection: theory
 category: basic
@@ -19,13 +19,13 @@ share: true
 related: true
 ---
 
-![](../../images/theory/basic/styleguide.png)
+![](../../images/theory/basic/code/styleguide.png)
 
-## Python风格指南
+## Python风格指南[^1]
 
 ### 一、包管理
 
-**1.模块导入规范**
+#### 1.模块导入规范
 
 只对包和模块使用import，不要对单个类型、类或函数使用，例如，可以像下面这样导入模块 `sound/effects/echo.py`。
 
@@ -45,11 +45,11 @@ sound.effects.echo. EchoFilter(input, output, delay=0.7, atten=4)
 
 ### 二、异常
 
-**1.自定义异常**
+#### 1.自定义异常
 
 库或包可以定义自己的异常。这样做时，它们必须继承现有的异常类。异常名称应该以Error结尾，并且不应该引入重复（foo.FooError）。
 
-**2.抛出异常**
+#### 2.抛出异常
 
 异常情况必须符合以下条件：
 - 有意义时使用内置异常类。例如，抛出ValueError来指出编程错误，比如违反了前置条件，比如在验证函数参数时可能发生的错误。
@@ -84,7 +84,7 @@ def connect_to_next_port(self, minimum: int) -> int:
     return port
 ```
 
-**3.捕获异常**
+#### 3.捕获异常
 
 永远不要使用catch-all except:语句，或者捕获Exception和StandardError，除非特殊情况：
 - 重新抛出异常。
@@ -96,7 +96,7 @@ def connect_to_next_port(self, minimum: int) -> int:
 
 ### 三、表达式
 
-**1.三元运算**
+#### 1.三元运算
 
 用于三元运算，减少冗余。
 
@@ -110,7 +110,7 @@ def connect_to_next_port(self, minimum: int) -> int:
         else 'no, false, negative, nay')
 ```
 
-**2.隐式false**
+#### 2.隐式false
 
 所有空值都被认为是false，因此0、None、[]、{}和''在布尔值上下文中都被视为false。
 
@@ -134,7 +134,7 @@ def f(x=None):
 
 ### 四、函数
 
-**1.默认参数**
+#### 1.默认参数
 
 不要在函数或方法定义中使用可变对象作为默认值。
 
@@ -156,6 +156,8 @@ No:  def foo(a, b: Mapping = {}):  # Could still get passed to unchecked code.
          ...
 ```
 
-**2.属性**
+#### 2.属性
 
 属性应该使用@property装饰器创建。
+
+[^1]: Google Style Guide https://google.github.io/styleguide/

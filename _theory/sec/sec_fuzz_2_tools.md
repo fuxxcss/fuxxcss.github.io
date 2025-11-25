@@ -1,6 +1,6 @@
 ---
-title: "动态漏洞挖掘：模糊测试框架 （Part 2/3）"
-excerpt: 'AFL(++)，Honggfuzz 边覆盖率反馈的工作原理'
+title: "动态漏洞挖掘：工具 （Part 2/3）"
+excerpt: '以 AFL(++)，Atheris为例'
 
 collection: theory
 category: sec
@@ -16,13 +16,13 @@ share: true
 related: true
 ---
 
-![](../../images/theory/sec/aflpp.png)
+![](../../images/theory/sec/fuzz_tools/aflpp.png)
 
 ## AFL(++)综述
 
 2013年提出的AFL(American Fuzzing Lop)方案，采用遗传编程（GP）作为反馈算法：适应度和进化指标均为边覆盖率(Edge Coverage)，遗传算子采用变异和交叉。
 
-![](../../images/theory/sec/afl/framework.png)
+![](../../images/theory/sec/fuzz_tools/framework.png)
 
 如果一个输入提高了边覆盖率，称为good种子。在迭代测试的过程中，保存good种子，报告bug。
 
@@ -30,69 +30,69 @@ related: true
 
 ### 一、遗传算法
 
-遗传编程(Genetic Programming)是进化算法中的一种。
-GP的工作过程：
+遗传编程(Genetic Programming)[^1]是进化算法中的一种。GP的工作过程：
 1. 初始化
 2. 评估适应度
 3. 根据适应度进行概率性选择
 4. 通过遗传算子生成下一代
 5. 判断是否符合终止标准，不符合则继续迭代
 
-**选择：**
+#### 1.选择
 
 基于适应度(fitness)选择个体的过程，被选择的个体在之后会作为父系通过遗传算子繁育下一代程序个体。
 AFL中将新状态作为适应度(当有新的 tuple (基本块->基本块)出现或已有 tuple 中出现新的命中组则视为产生新状态)。每次执行程序后，对比位图有无产生新状态来决定是否保存测试用例。
 
-**遗传算子：**
+#### 2.遗传算子
 
 经过一轮选择得到适应性较好的父体后，遗传算子对父体(parent)进行遗传操作，生成子代(child)。遗传算子主要包括以下两种：
 
-1. 变异（Mutation）
+**2.1 变异（Mutation）**
+
 一个父体的随机部分变异。常用的一种subtree mutation：在一个父体中随机选择一个突变点(mutation point)，随机生成一个子树，将父体中以突变点为根节点的子树替换为这个随机生成的子树。
 
-![](../../images/theory/sec/afl/mutation.png)
+![](../../images/theory/sec/fuzz_tools/mutation.png)
 
-2. 交叉（Crossover）
+**2.2 交叉（Crossover）**
 
 两个父体基因的混合/交换。常用的一种子树(subtree) crossover过程：在每一个父体中随机选择一个杂交点(crossover point)，复制第二个父体中以杂交点为根节点的子树，将一父体杂交点下的子树替换为二父体下的子树，生成子体。
 
-![](../../images/theory/sec/afl/crossover.png)
+![](../../images/theory/sec/fuzz_tools/crossover.png)
 
 子树crossover由两个父体随机生成了一个子体。其他多种交叉/杂交方法中，也存在由两个父体生成两个子体的种类，如one-point crossover
 
 ### 二、插桩
 
-插桩技术是在程序中插入探针和代码段，来收集运行时的信息，常用于安全测试和动态代理。例如Fuzzing、DTA、ASAN都使用插桩来实现相应的功能。根据插桩的方式和目标的不同，插桩技术可以分为：
+插桩技术[^2]是在程序中插入探针和代码段，来收集运行时的信息，常用于安全测试和动态代理。例如Fuzzing、DTA、ASAN都使用插桩来实现相应的功能。根据插桩的方式和目标的不同，插桩技术可以分为：
 1. 源码插桩，在已知源码的情况下进行插桩。这种情况下不必考虑重定位的问题，根据编译器技术的不同，有汇编级别插桩(如afl-as)和编译器级别插桩(如LLVM pass)两种方式。
 2. 二进制插桩，需要对编译后的二进制程序进行插桩。根据插桩的阶段不同，有静态二进制插桩SBI(如RetroWrite)和动态二进制插桩DBI(如AFL的QEMU模式)两种。其中SBI需要考虑重定位的问题，DBI不需要。
 
-静态和动态二进制插桩使用不同的方法解决了插入和重新定位代码的困难问题。SBI使用二进制重写技术来永久修改磁盘上的二进制文件。DBI不修改磁盘上的二进制文件，而是在二进制文件执行时监视它们的进程，并在指令流中动态插入新指令。这种方法的优点是避免了代码重定位问题，因为：插入代码只注入到指令流中，而不注入到内存中二进制的代码段中，因此它不会破坏引用。然而，代价是DBI的运行时插桩在计算上更昂贵，导致速度比SBI慢。
+静态和动态二进制插桩[^3]使用不同的方法解决了插入和重新定位代码的困难问题。SBI使用二进制重写技术来永久修改磁盘上的二进制文件。DBI不修改磁盘上的二进制文件，而是在二进制文件执行时监视它们的进程，并在指令流中动态插入新指令。这种方法的优点是避免了代码重定位问题，因为：插入代码只注入到指令流中，而不注入到内存中二进制的代码段中，因此它不会破坏引用。然而，代价是DBI的运行时插桩在计算上更昂贵，导致速度比SBI慢。
 
-**1.静态二进制插桩**
+#### 1.静态二进制插桩
 
 SBI需要对二进制程序反汇编，然后按需添加插桩代码，更新二进制程序存入磁盘。SBI需要处理重定位问题，有两种常用的方法：int3和跳板trampoline。
 首先来看最朴素的插桩方法，如下图所示。假设要对mov edx，0x1指令插桩，可以使用jmp指令将其覆盖，跳转到插桩代码。在插桩代码中：对寄存器状态进行保存，执行mov edx，0x1和标记代码(用来统计覆盖率等)，恢复寄存器状态，返回到正常指令。
 
-![](../../images/theory/sec/afl/sbi1.png)
+![](../../images/theory/sec/fuzz_tools/sbi1.png)
 
 这种方法有两个问题：首先jmp instrum指令是5个字节，如果插桩目标指令小于5字节，会出现覆盖下一条指令的问题；第二，插桩目标指令与标记代码一起执行，会造成寄存器状态的混乱。
 1. int3方案，使用x86的int 3指令，调试器用其实现软件断点，SBI库同样可以捕捉SIGTRAP信号，通过ptrace找到中断的地址，从而获取插桩点地址。相比于使用jmp覆盖原来的指令，使用int 3指令来覆盖只有1个字节0xcc，后面可以填充nop平衡相对地址。缺点是：int 3软件中断时间开销大；如果程序本身有很多int 3指令，会和插桩的int 3指令相混淆。
 2. 跳板(trampoline)方案，是简单方法的改进，以函数为单位进行插桩。创建所有函数的副本，放在新的代码段.text.instrum中；用jmp指令覆盖原始函数的第一条指令，使其跳转到副本函数。后面使用垃圾字节平衡相对地址。同时，在副本函数中，可以在每条可能的插桩目标指令前插入若干nop指令，方便使用call覆盖跳转到标记代码；为了相对寻址的正确性，重写所有寻址指令。例如，需要对ret指令进行标记，则在ret前覆写指令call hook_ret，hook_ret是标记函数，可以由SBI的动态库提供。在hook_ret中保存寄存器状态，运行相关指令，恢复寄存器状态。
 
-![](../../images/theory/sec/afl/sbi2.png)
+![](../../images/theory/sec/fuzz_tools/sbi2.png)
 
 上面的方案适合于直接调用、直接跳转和间接调用。对于间接跳转，以switch的汇编实现为例，需要修改跳转表中case地址，指向副本中的case。
 
-![](../../images/theory/sec/afl/sbi3.png)
+![](../../images/theory/sec/fuzz_tools/sbi3.png)
 
 缺点是：复制了所有函数，使得二进制程序占用空间增大；间接跳转需要额外的工作；对于内联数据，可能造成对数据的覆盖。最后，SBI的正确性都建立在反汇编的正确性上，如果反汇编有问题，一切修改都会破坏原来的二进制程序。
 
-**2.动态二进制插桩**
+#### 2.动态二进制插桩
 
 DBI通过监视和控制所有执行的指令来动态插桩进程，不会出现SBI的各种问题，在现代平台上也不比SBI慢太多。
 一个DBI系统有很多组成部分，如下图所示。在操作系统上，虚拟机用来实现在指令流中动态插入新指令，而不会破坏主机内存中的进程。DBI工具用来启动DBI系统、与插桩引擎交互。
 
-![](../../images/theory/sec/afl/dbi.png)
+![](../../images/theory/sec/fuzz_tools/dbi.png)
 
 1. DBI工具向DBI系统注册函数instrument_bb，DBI引擎依此对基本块插桩。
 2. 初始化函数启动DBI系统。
@@ -112,9 +112,9 @@ sanitizer是目前主流的漏洞挖掘辅助技术，取代DTA搭配模糊测�
 
 google的sanitizer项目包括很多子项目，包括有ASAN、MSAN、UBSAN、TSAN、KASAN、QASAN等等。
 
-**1.ASAN**
+#### 1.ASAN
 
-AddressSanitizer (简称 ASAN) 是C/C++的内存错误检测器 ，它可以发现以下漏洞：
+AddressSanitizer (简称 ASAN) 是C/C++的内存错误检测器[^4] ，它可以发现以下漏洞：
 1. Use after free (dangling pointer dereference)
 2. Heap buffer overflow
 3. Stack buffer overflow
@@ -133,7 +133,7 @@ ASAN包括一个编译器插桩模块和一个替代malloc函数的运行时库�
 
 对于每个内存读写指令，进行编译时插桩。IsPoisoned检查被访问的内存是否是可访问的(即not poisoned)，内存是否poisoned的元信息保存在影子内存中。
 
-![](../../images/theory/sec/afl/asan_inst.png)
+![](../../images/theory/sec/fuzz_tools/asan_inst.png)
 
 对内存的访问可以分为：栈访问和堆访问，二者都需要在分配的内存周围插入redzone，对redzone进行poison。然后插桩后的内存访问指令再通过IsPoisoned检查。
 
@@ -187,7 +187,7 @@ void foo_instrumented(){
 
 MemToShadow函数返回内存地址shadow_base=addr>>3+0x20000000，从栈的shadow_base操作可以看到，对于1个字节的内存的poison/notpoison情况，使用1个bit来表示。
 
-**2.TSAN**
+#### 2.TSAN
 
 TSan 用来检查数据争用(data race)、死锁(deadlock)。当多个线程同时操作同一个变量的时候，而至少一个的操作是写操作时，就会发生数据争用；当多个线程因争夺资源而造成的一种互相等待的情况，若无外力介入，它们都无法继续推进，就是死锁。
 
@@ -197,15 +197,15 @@ TSan 需要所有代码都以 -fsanitize=thread 编译参数进行编译。在�
 
 如下图所示，当一个线程对共享资源 v 的操作使用了锁，并且在之后一个 不同的线程中对共享资源 v 再次申请了锁并且使用完 后释放，那么率先使用锁对共享资源 v 操作的线程和后 续使用锁的线程满足 happens-before 关系。通过设置 happens-before 规则，在每个多线程进程中检测任意两 个操作之间是否满足happens-before关系。
 
-![](../../images/theory/sec/afl/tsan.png)
+![](../../images/theory/sec/fuzz_tools/tsan.png)
 
-如果存在两 个操作不满足 happens-before 关系，则判定存在竞态漏洞。因为happens-bofore方法能够确保所有操作之间不会存在结果不确定的情况，所以 happens-before 方法误报率低。
+如果存在两个操作不满足 happens-before 关系，则判定存在竞态漏洞。因为happens-bofore方法能够确保所有操作之间不会存在结果不确定的情况，所以 happens-before 方法误报率低。
 
-## 使用指南
+## 使用指南[^5]
 
 ### 一、工作流程
 
-![](../../images/theory/sec/afl/progress.png)
+![](../../images/theory/sec/fuzz_tools/progress.png)
 
 1. 确定模糊测试的对象，是命令行工具、动态库、虚拟机还是数据库等等。模糊测试的对象决定了构造的测试用例怎么输入，是从标准输入、编写harness还是通过驱动程序。
 2. 源码插桩/静态重写/qemu插桩，以便跟踪边覆盖率。
@@ -257,10 +257,9 @@ afl-clang/afl-clang++：指向afl-cc/afl-c++。
 afl-clang-fast/afl-clang-fast++/：指向afl-cc/afl-c++。
 afl-clang-lto/afl-clang-lto++：需要下载llvm和lld，设置LLVM_CONFIG=llvm-config-xx，再编译AFL++，指向afl-cc/afl-c++。
 
-
 ### 四、状态窗口
 
-![](../../images/theory/sec/afl/state.png)
+![](../../images/theory/sec/fuzz_tools/state.png)
 
 Process timing：Fuzzer运行时长、以及距离最近发现的路径、崩溃和挂起经过了多长时间。
 Overall results：Fuzzer当前状态的概述。
@@ -294,18 +293,18 @@ afl-fuzz crash模式：
 将crash的例子作为输入，afl-fuzz -C -i -o ./vuln，在已知崩溃的条件下，探索其他代码路径。
 
 crashwalk：
-如果你想得到更细致的crashes分类结果，以及导致crashes的具体原因，这个工具基于gdb的exploitable插件，crashwalk支持AFL/Manual两种模式。
+如果你想得到更细致的crashes分类结果，以及导致crashes的具体原因，这个工具基于gdb的exploitable插件，crashwalk支持AFL和Manual两种模式。
 
 基于ASAN/QASAN：
 配合harness逻辑触发asan日志。
 
 ## 插桩
 
-在AFL(++)中，插桩的目的是统计边覆盖率信息，反馈指导后续的测试过程。AFL(++)提供的插桩功能有以下两种：
+在AFL(++)中，插桩的目的是统计边覆盖率信息，反馈指导后续的测试过程[^6]。AFL(++)提供的插桩功能有以下两种：
 1. 源码插桩，有汇编级别和编译器级别两种。汇编级别是在重定位生成PIE文件之前，在汇编文件的.text节中的每个基本块中插桩，插入一段指令调用__afl_maybe_log收集这条边。编译器级别是利用LLVM把统计覆盖率的pass插入每一个基本块。
 2. 二进制插桩，有动态插桩和静态重写两种。动态插桩(DBI)是使用动态翻译机制，例如在QEMU翻译时，记录本次翻译块的覆盖率信息，相比于随机数标识，QEMU以翻译块的内存地址作为基本块标识符。静态重写是修改二进制文件，达到源码插桩的效果。
 
-**1.源码插桩**
+#### 1.源码插桩
 
 **1.1 汇编级别**
 
@@ -317,7 +316,7 @@ crashwalk：
 
 如下图，插入的代码trampoline_fmt_64，相当于一个inline函数 ，开辟一段栈区，0xe267是调用R(MAP_SIZE)产生的随机数，作为基本块的标识符和参数，传递给记录边覆盖率的函数__afl_maybe_log。该函数存在于afl为所有程序末尾插入的main_payload_64中。
 
-![](../../images/theory/sec/afl/trampoline.png)
+![](../../images/theory/sec/fuzz_tools/trampoline.png)
 
 **1.2 编译器级别(LLVM模式)**
 
@@ -336,11 +335,11 @@ afl-llvm-pass.so.cc文件主要是当通过afl-clang-fast调用 clang 时，这�
 afl-clang-fast.c文件本质上是 clang 的 wrapper，最终调用的还是 clang 。但是与afl-gcc一样，会进行一些参数处理。
 llvm_mode的插桩思路就是通过编写pass来实现信息记录，对每个基本块都插入探针，具体代码在afl-llvm-pass.so.cc文件中，初始化和forkserver操作通过链接完成。
 
-**2.无源码插桩**
+#### 2.无源码插桩
 
 **2.1 QEMU模式**
 
-与LLVM模式的源码插桩不同，QEMU模式基于动态翻译进行了动态二进制插桩(DBI)。AFL对QEMU进行了patch来实现DBI，相关patch在AFL-master/qemu_mode/patches。
+与LLVM模式的源码插桩不同，QEMU模式[^7]基于动态翻译进行了动态二进制插桩(DBI)。以AFL的实现为例，AFL对QEMU进行了patch来实现DBI，相关patch在AFL-master/qemu_mode/patches。
 elfload.diff：在QEMU加载elf文件时，获取入口点地址、代码段起始地址、代码段结束地址，三个变量定义在afl-qemu-cpu-inl.h中。
 ``` c
 abi_ulong afl_entry_point, /* ELF entry point (_start) */
@@ -424,7 +423,7 @@ AFL(++)中当有新的边 (BB->BB)出现或记录的边出现新的命中桶则�
 2. 破坏性变异havoc
 3. 拼接splicing
 
-**1.确定性变异deterministic**
+#### 1.确定性变异deterministic
 
 包括在测试用例的内容上进行单个的确定性变异。
 
@@ -464,11 +463,11 @@ interest 32/8，每次32bit进行加减运算，8bit步长从头开始，即对�
 
 会把用户提供的token替换、插入到原文件中。
 
-**2.破坏性变异havoc**
+#### 2.破坏性变异havoc
 
 变异是随机叠加的，还包括改变测试用例的大小（例如添加或删除部分输入）。
 
-**3.拼接splicing**
+#### 3.拼接splicing
 
 将两个差异明显的测试用例，各切一半，合并为一个，并执行破坏性变异。
 
@@ -484,15 +483,15 @@ export AFL_CUSTOM_MUTATOR_LIBRARY="full/path/to/libmutator.so"
 ```
 ### 三、REDQUEEN
 
-在KAFL的基础上，探索了绕过困难比较和(嵌套)校验和检查的方案，但不使用诸如污点跟踪或符号执行之类的昂贵技术。该模糊测试方案专注于Input-to-State（I2S）的比较，这是一种与至少一个操作数中的输入直接相关的比较类型。作者表明，许多障碍都是这种类型的，并开发了一种定位和绕过它们的技术。
+在KAFL的基础上，探索了绕过困难比较和(嵌套)校验和检查的方案，但不使用诸如污点跟踪或符号执行之类的昂贵技术。该模糊测试方案专注于Input-to-State（I2S）的比较[^8]，这是一种与至少一个操作数中的输入直接相关的比较类型。作者表明，许多障碍都是这种类型的，并开发了一种定位和绕过它们的技术。
 
 I2S关联的例子如下图所示。对cmp指令进行hook，运行指令时可以观察到eax的值为VALU，0x44434241则为ABCD(均为小端序)。
 
-![](../../images/theory/sec/afl/redqueen1.png)
+![](../../images/theory/sec/fuzz_tools/redqueen1.png)
 
 input中同样有VALU出现，由此推断：如果将输入中的VALU替换为ABCD，就有较大可能绕过这个障碍。
 
-![](../../images/theory/sec/afl/redqueen2.png)
+![](../../images/theory/sec/fuzz_tools/redqueen2.png)
 
 ## 循环测试
 
@@ -508,14 +507,14 @@ AFL(++)要达到循环测试，需要配置好四个组成部分：
 
 forkserver是AFL++的一种机制，为了避免从afl-fuzz调用fork启动被测程序，还需要调用execve加载被测程序导致的额外开销。
 
-**1.forkserver的初始化**
+#### 1.forkserver的初始化
 
 afl-fuzz生成了测试进程，由于是第一次运行到插桩代码__afl_maybe_log，检测到了forkserver未启动，它则作为forserver，以后都是从被测程序自己fork，这样省略了execve开销。
 由于测试进程是fork出来的，继承了覆盖率信息的共享内存__AFL_SHM_ID，调用shmat将返回地址存储在__afl_area_ptr中，所以测试进程的覆盖率信息fuzzer可以直接访问到。
 
-![](../../images/theory/sec/afl/forkserver.png)
+![](../../images/theory/sec/fuzz_tools/forkserver.png)
 
-**2.forkserver传递信息**
+#### 2.forkserver传递信息
 
 forkserver作为fuzzer和target的桥梁，调用pipe函数传递以下两种信息：
 1. 测试用例。
@@ -531,20 +530,23 @@ forkserver从fuzzer接收测试用例，再将测试用例输入测试进程，�
 
 正常情况下，对于每一个测试用例，都会fork()出一个新的目标进程进行处理，而大量fork()无疑会带来大量开销。为此，将一个loop patch到测试目标中，每次fork()得到的进程，会对一批而非单个测试用例进行处理，从而减少了开销，提高了执行速度。
 
-**1.LLVM持久模式**
+#### 1.LLVM持久模式
 
 使用宏定义__AFL_LOOP(NUM)来决定单进程处理多少测试用例。需要注意的是每次fuzz过程都会改变一些进程或线程的状态变量，因此，在复用这个fuzz子进程的时候需要将这些变量恢复成初始状态。
 
-![](../../images/theory/sec/afl/loop.png)
+![](../../images/theory/sec/fuzz_tools/loop.png)
 
 官方建议的数值为1000，循环次数设置过高可能出现较多意料之外的问题，并不建议设置过高。
 
-**2.QEMU持久模式**
+#### 2.QEMU持久模式
 
 此模式最高可以达到10倍加速，因此AFL++建议尽可能使用此模式。有两种主要方法可以实现此目的：
 1. 循环一个函数：用户指定一个函数的地址，通常是harness函数的偏移值，模糊器会自动在while(__AFL_LOOP(NUM))循环中使用该函数，修改其返回地址。该地址也可以不是函数的第一条指令，但是在这种配置下，用户必须提供栈上的偏移量，以正确定位要修改的返回地址。
 2. 入口点和出口点：用户可以指定循环的第一条指令和最后一条指令的地址，QEMU将在运行时修改代码以在这些地址之间生成循环。
 
+## Atheris
+
+[^9]
 
 ## 智能模糊测试
 
@@ -555,4 +557,18 @@ forkserver从fuzzer接收测试用例，再将测试用例输入测试进程，�
 ### 二、结合符号执行
 
 结合符号执行，主要是为了解决魔数匹配导致模糊测试卡住的问题，利用符号执行快速突破条件判断语句。出名的有Driller（angr + afl）。
+
+### 三、AI驱动
+
+基于LLM，Agent等AI技术
+
+[^1]: Genetic Programming: An Introduction and Tutorial, with a Survey of Techniques and Applications https://wiki.eecs.yorku.ca/course_archive/2011-12/F/4403/_media/gp1.pdf
+[^2]: fuzzing in depth https://github.com/AFLplusplus/AFLplusplus/blob/stable/docs/fuzzing_in_depth.md
+[^3]: Practical Binary Analysis https://www.amazon.com/Practical-Binary-Analysis-Instrumentation-Disassembly/dp/1593279124
+[^4]: ASAN Wiki https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm
+[^5]: AFLpp https://aflplus.plus/features/
+[^6]: afl under hood https://blog.ritsec.club/posts/afl-under-hood/
+[^7]: QEMU mode https://github.com/AFLplusplus/AFLplusplus/blob/stable/qemu_mode/README.md
+[^8]: REDQUEEN https://www.syssec.ruhr-uni-bochum.de/media/emma/veroeffentlichungen/2018/12/17/NDSS19-Redqueen.pdf
+[^9]: Python Fuzzing https://appsec.guide/docs/fuzzing/python/
 

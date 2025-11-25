@@ -23,7 +23,7 @@ redirect_from:
 
 ---
 
-# 联系我
+## 联系我
 
 📩 [电子邮件](mailto:fuxxcss@outlook.com)
 

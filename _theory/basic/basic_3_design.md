@@ -1,6 +1,6 @@
 ---
 title: "计算机基础：设计模式（Part 3/6）"
-excerpt: '18种常用设计模式的伪代码实现'
+excerpt: '创建型、结构型和行为模式'
 
 collection: theory
 category: basic
@@ -19,9 +19,9 @@ related: true
 
 ![](../../images/theory/basic/design/abstract.png)
 
-### 创建型模式
+## 创建型模式
 
-创建型模式提供了创建对象的机制， 能够提升已有代码的灵活性和可复用性。
+创建型模式[^1]提供了创建对象的机制， 能够提升已有代码的灵活性和可复用性。
 
 ### 一、工厂模式
 
@@ -438,7 +438,8 @@ class Application is
         bar.query("SELECT ……")
         // 变量 `bar` 和 `foo` 中将包含同一个对象。
 ```
-### 结构型模式
+
+## 结构型模式
 
 结构型模式介绍如何将对象和类组装成较大的结构， 并同时保持结构的灵活和高效。
 
@@ -868,7 +869,7 @@ class Application is
         manager.reactOnUserInput()
 ```
 
-### 行为模式
+## 行为模式
 
 行为模式负责对象间的高效沟通和职责委派。
 
@@ -1688,3 +1689,5 @@ class Application is
         foreach (shape in allShapes) do
             shape.accept(exportVisitor)
 ```
+
+[^1]: Refactoring Guru https://refactoringguru.cn/design-patterns/catalog

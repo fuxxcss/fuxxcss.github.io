@@ -1,6 +1,6 @@
 ---
-title: "RobotAgent：多机智能体协作（Part 3/5）"
-excerpt: '分布式与多机智能体'
+title: "RobotAgent：协作（Part 3/5）"
+excerpt: '多机器人智能体系统'
 
 collection: theory
 category: robotagent
@@ -20,7 +20,7 @@ related: true
 
 ## MAS协作
 
-多agent系统（MAS）适用于RobotAgent的多机智能体协作，利用群体智慧，采用结构化的`工作流`、定义统一的`交互规范`来同步他们的行动以实现协作目标。
+多agent系统（MAS）[^1]适用于RobotAgent的多机智能体协作，利用群体智慧，采用结构化的`工作流`、定义统一的`交互规范`来同步他们的行动以实现协作目标。
 
 ### 一、工作流
 
@@ -44,10 +44,10 @@ Agent-Agent交互规范：
 - A2A：主要关注智能体之间的协作，特别是解决应用层协议
 - MCP：主要关注标准化AI模型与外部数据源（如数据库、API、文件系统）的连接。
 
-
-
 ### 二、
 
 消息类型：
 - 结构化，常见的有JSON、XML和代码形式。
 - 非结构化，自然文本，视觉数据（例如图像、视频）和音频信号（例如语音、环境声音）。
+
+[^1]: MAS https://google.github.io/adk-docs/agents/multi-agents/

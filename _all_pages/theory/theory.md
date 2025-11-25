@@ -13,9 +13,9 @@ author_profile: true
 - 计算机基础
 - 编程
 
-🕵️ [机器人智能体安全](./sec)
+🕵️ [安全](./sec)
 - 漏洞
 - 漏洞挖掘
 
-🧸[机器人智能体实现](./robotagent)
-- 多机智能体协作
+🧸[机器人智能体](./robotagent)
+- RobotAgent

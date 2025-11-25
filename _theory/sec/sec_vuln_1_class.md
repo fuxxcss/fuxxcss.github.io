@@ -1,6 +1,6 @@
 ---
-title: "RobotAgent漏洞：分类（Part 1/3）"
-excerpt: 'Top 10 代码漏洞、通用漏洞'
+title: "RobotAgent漏洞：分类（Part 1/4）"
+excerpt: 'Top 代码漏洞、通用漏洞'
 
 collection: theory
 category: sec
@@ -16,7 +16,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/sec/vuln.png)
+![](../../images/theory/sec/vuln_class/vuln.png)
 
 ## RobotAgent漏洞
 
@@ -24,7 +24,7 @@ related: true
 
 ### 一、漏洞的影响
 
-根据漏洞对程序的影响分类，漏洞的影响有以下4种：
+根据漏洞对程序的影响分类，漏洞的影响有以下4种[^1]：
 1. DoS/抛出异常
 2. 信息泄露
 3. 权限提升
@@ -38,7 +38,7 @@ RobotAgent的漏洞存在2类：
 
 ## Top 10 代码漏洞
 
-涵盖最常见的代码漏洞[^1]。
+涵盖最常见的代码漏洞[^2]。
 
 ### 一、OOB(Out-of-bounds)
 
@@ -46,7 +46,7 @@ OOB类型的漏洞有两种原语：
 1. OOB R，越界读，导致泄漏关键信息绕过保护策略、读取到非预期的内存页。
 2. OOB W，越界写，导致关键指针、数据和控制结构被覆盖，同时越界写通常可以实现越界读。
 
-**1.栈溢出(OOB R/W)**
+#### 1.栈溢出(OOB R/W)
 > **受影响的语言：Python，C++，Go，Java**
 
 栈溢出是一种 OOB R/W 漏洞，通过构造恶意输入可导致4种影响：
@@ -61,7 +61,7 @@ OOB类型的漏洞有两种原语：
 2. off-by-one，在用户态程序或内核调用strncat(), strncpy(),strlen()时出现。
 - 常见的漏洞利用：覆写rip，rbp或者邻接变量实现控制流劫持。
 
-**2.堆溢出(OOB R/W)**
+#### 2.堆溢出(OOB R/W)
 > **受影响的语言：Python，C++，Go，Java**
 
 堆溢出是一种OOB R/W漏洞，通过构造恶意输入可导致4种影响：
@@ -76,7 +76,7 @@ OOB类型的漏洞有两种原语：
 2. off-by-one，类似于栈off-by-one，区别在于堆off-by-one造成代码执行的可利用性与堆溢出相当。
 - 常见的漏洞利用：一个例子是用户态程序溢出0x00时，在size为0x100倍数的时，使得prev_in_use位被清，这样前块会被认为是freed块，从而触发特定bin的前向合并造成unsafe unlink，实现任意地址写，在此基础上覆写got表，篡改FSOP、rtld_global上面的函数指针为one_gadget，实现代码执行。
 
-**3.缺陷函数越界访问(OOB R)**
+#### 3.缺陷函数越界访问(OOB R)
 > **受影响的语言：Python，C++，Go，Java**
 
 缺陷函数越界访问是OOB R类型漏洞，造成2种影响：
@@ -91,7 +91,7 @@ UAF类型的漏洞有4种原语：
 3. Double Free，二次释放，达到UAF R/W的效果。
 4. UAF变种。
 
-**1.堆UAF(UAF R/W)**
+#### 1.堆UAF(UAF R/W)
 > **受影响的语言：C++**
 
 堆UAF造成的影响：
@@ -106,14 +106,14 @@ UAF类型的漏洞有4种原语：
 内核堆UAF：
 在内核页管理代码、细粒度的object管理代码中存在UAF漏洞。
 
-**2.堆Double Free(UAF R/W)**
+#### 2.堆Double Free(UAF R/W)
 > **受影响的语言：C++**
 
 当一个内存块被2次free后，再1次allocate时，该块会同时处于allocated和freed状态，即该内存块在保存freed状态bins信息的情况下，是可读写的，由此达到UAF R和UAF W的效果。
 
 堆Double Free达到UAF R和UAF W的效果，造成相同的影响。
 
-**3.UAF变种**
+#### 3.UAF变种
 > **受影响的语言：Python，C++，Go，Java**
 
 即使使用垃圾回收运行时库，也可能出现UAF漏洞，因为UAF的对象除了chunk，还有文件描述符、网络连接等，比如Use After Close，文件描述符关闭之后仍然访问；Double Close，二次关闭文件描述符。
@@ -147,7 +147,7 @@ UAF变种造成的影响：
 
 整数类型的漏洞，可能由整数运算、符号转换产生。
 
-**1.整数运算**
+#### 1.整数运算
 
 整数溢出是CPU中ALU对(有/无符号)整数之间的运算导致的上溢或下溢。如果一个对象的大小发生整数溢出，会间接影响到栈或堆为该对象分配的空间大小，引发栈溢出和堆溢出，为漏洞利用创造条件。
 
@@ -178,7 +178,7 @@ read_buffer(num);
 
 如果num等于INT_MIN，符号位作参与运算，会产生下溢，导致其值变成INT_MAX，触发栈越界读。
 
-**2.符号转换**
+#### 2.符号转换
 
 在无符号整数、带符号整数之间转换时发生了预期之外的数值误差，误差引发栈溢出和堆溢出，为漏洞利用创造条件。
 
@@ -212,11 +212,11 @@ get_src_len()接收无符号数大于231，经过符号转换后len变成负数�
 
 控制流注入是对命令注入、代码注入的概括。利用这些漏洞构造的语义化输入，可以直接劫持控制流，导致代码执行。
 
-**1.命令注入**
+#### 1.命令注入
 
 程序将恶意输入拼接到操作系统命令中，导致代码执行。
 
-**2.代码注入**
+#### 2.代码注入
 
 代码注入有相当多的变种，比如：XSS、XXE、SSTI、SPEL表达式注入等等。都是通过构造语义化输入，使得程序执行其中的代码。
 
@@ -237,7 +237,7 @@ get_src_len()接收无符号数大于231，经过符号转换后len变成负数�
 
 竞态条件（race condition）是指这样一种情形——多个线程或进程在读写一个共享数据时结果依赖于它们执行的相对时间。如果竞态条件危害了程序正确性，就会产生竞态条件漏洞，可以被TSAN明确分类。
 
-**1.数据竞争**
+#### 1.数据竞争
    
 定义内存访问操作：e 为一个四元组 (m,t,L,a) ，其中：m 为内存访问操作的内存地址；t 为标识内存访 问操作的线程；L 为操作所属线程拥有的锁集合；a 为 内存访问操作的类型（READ或WRITE）。
 数据竞争 IsRace(ei ,ej) 是满足以下条件的两个内存访问操作：
@@ -248,31 +248,31 @@ get_src_len()接收无符号数大于231，经过符号转换后len变成负数�
 
 DirtyCow 漏洞（CVE-2016-5195）是最为典型的数据竞争引发的漏洞。如下图所示，正常的程序流程三次调用了 faultin_ page 函数完成了三个步骤，其中第二次进入 faultin_ page主要是处理写权限的页错误问题，要求的写权限标 志会被去掉，即去掉FOLL_WRITE标志位，第三次调用 faultin_page 时已经成功得到 cow 后的页面，且 flags 已经去掉 FOLL_WRITE，因此不会再产生写错误的处理， 可以直接写入 cow 的页。
 
-![](../../images/theory/sec/types/dirtycow.png)
+![](../../images/theory/sec/vuln_class/dirtycow.png)
 
 但是如果在上述流程即第二 次页错误处理结束时，在一个新的线程调用madvise，会 unmap 掉前面 cow 的页面，又进入缺页处理，这里不同 的是在do_fault调用时，由于没有了写权限的要求，直接 调用了 do_read_fault读取映射文件的内存页，而不是内存页副本，后续即可实现越权写操作。
 在 DirtyCow 漏洞中，两个线程竞争的资源是内存页，并且造成了程序 正确性的影响。某些数据竞争发生时 并不会影响程序的正确性，例如当两个进程竞争的内存 共享资源和两个进程的逻辑完全无关，则认为构成数据竞争但是不构成竞态漏洞。DirtyCow正是由于在数据竞争发生之后导致 任意文件被恶意篡改的危害性结果，才被研究人员归结为竞态漏洞。
 
-**2.TOCTTOU**
+#### 2.TOCTTOU
 
 TOCTTOU（Time Of Check To Time Of Use）指计算机系统中的 资源与权限等状态在检查（安全授权）和使用这个检查 结果之间，因为检查结果（如授权状态）在这段时间发 生了改变而造成的漏洞产生。
 TOCTTOU 通常发生 在文件系统的访问时，特别是在 UNIX操作系统中较为 常见，文件系统访问一般会要求对文件先检查再写入， 这就导致检查与读写操作之间存在时间间隔，攻击者 可利用这种时间间隔对文件系统展开攻击。
 类 Unix 文件系统中存在 TOCTTOU 缺陷的根本原因在于文件 名和文件对象之间的映射是可变的，如下图所示，TOUCTTOU 的典型例子 Binmail。 Binmail是一个setuid-to-root程序，在普通用户权限下可 以调用执行 root 用户权限的操作。在正常的读取邮件 的过场中，Binmail 首先通过 lstat 函数查看文件 mail 的 信息，如果 mail文件是正常文件，不是符号链接则执行 open函数打开邮件。
 
-![](../../images/theory/sec/types/tocttou.png)
+![](../../images/theory/sec/vuln_class/tocttou.png)
 
 但是由于 lstat和 open函数不是原始操作，所以如果在 lstat函数检查完毕后，另外一个线 程或者进程可以通过 unlink和 symlink操作将 mail文件 替换为指向系统关键文件/etc/passwd等文件的链接，那 么 open 的文件将会是替换后的系统关键文件，实现了任意文件读取。
 一个基于文件的TOCTTOU例子的exp如下图所示。use在check后面执行而导致的漏洞。
 
-![](../../images/theory/sec/types/tocttou_exp.png)
+![](../../images/theory/sec/vuln_class/tocttou_exp.png)
 
 综上，TOCTTOU是竞态漏洞的子集，数据竞争和竞态漏洞存在交集。
 
-**3.Double Fetch**
+#### 3.Double Fetch
 
 Double Fetch也是竞态漏洞的一个子集，该漏洞的原理是：内核从用户空间中拷贝复杂数据时，数据在内核中有两次被取用，内核第一次取用数据进行安全检查（如缓冲区大小、指针可用性等），当检查通过后内核第二次取用数据进行实际处理。
 
-![](../../images/theory/sec/types/double_fetch.png)
+![](../../images/theory/sec/vuln_class/double_fetch.png)
 
 在两次取用的时间间隔里，可以对已通过检查的用户态数据进行篡改，在第二次取用时造成访问越界或缓冲区溢出，最终导致内核崩溃或权限提升。Double Fetch通常会出现在以下场景：
 
@@ -282,15 +282,15 @@ Double Fetch也是竞态漏洞的一个子集，该漏洞的原理是：内核�
 
 从原理上来看，Double Fetch和TOCTTOU类似，都是利用时间间隔篡改数据，造成不一致性。也因此是可以被修复的。
 
-## Top 10 通用漏洞
+## Top 5 通用漏洞
 
-涵盖常见的RobotAgent漏洞[^2][^3]。
+涵盖常见的RobotAgent漏洞[^3][^4]。
 
-### 一、非法控制
+### 一、越权
 
 通过非法的操作获取了机智的运行权限，使其执行恶意的操作。
 
-### 二、越权
+### 二、滥用
 
 对强大操作（如杀死人类）的不受控访问是高度危险的。安全编排需要为工具使用提供健壮的身份验证和授权，确保智能体对当前任务具有适当约束的权限（权限最小化）。
 
@@ -313,15 +313,8 @@ Double Fetch也是竞态漏洞的一个子集，该漏洞的原理是：内核�
 
         计划错误： 机器人规划了一条“最优”路径，但却穿过了一个湿滑或不平坦的危险区域，导致摔倒。
 
-### 三、传感器欺骗
 
-攻击者可以用对抗性图案欺骗机器人的视觉系统，导致它“看”不到障碍物，或者将一个危险物体误认为是安全的。例如，在墙上贴一个特殊图案，让机器人认为那里是通道而撞上去。
-
-### 四、记忆投毒
-
-
-
-### 五、MAS利用
+### 三、MAS利用
 
 常见的漏洞示例
 1. 恶意行为者利用代理之间的信任关系在代理网络中传播未经授权的命令。
@@ -337,7 +330,9 @@ Double Fetch也是竞态漏洞的一个子集，该漏洞的原理是：内核�
 4. 一个混乱的代理攻击欺骗特权代理执行未经授权的行动代表攻击者。可信代理的合法权限被用来执行恶意操作。
 5. 攻击者利用多代理系统中的反馈循环，导致代理重复执行资源密集型任务。这将创建影响整个代理网络的拒绝服务条件。
 
-### 六、供应链、依赖攻击
+#### 四、记忆投毒
+
+### 五、供应链、依赖攻击
 
 常见的漏洞示例
 1. 在构建过程中注入恶意代码的受损代理开发工具。
@@ -359,6 +354,7 @@ Double Fetch也是竞态漏洞的一个子集，该漏洞的原理是：内核�
 3. 软件依赖：人工智能代理依赖的库和框架可能存在隐藏的漏洞。
 4. 执行环境：无论是基于云的、内部部署的还是边缘设备，人工智能代理运行的环境都可能存在安全漏洞。
 
-[^1]: CWE Website https://cwe.mitre.org/
-[^2]: Agentic-AI-Top10-Vulnerability https://github.com/precize/Agentic-AI-Top10-Vulnerability/
-[^3]: Google’s Approach for Secure AI Agents https://storage.googleapis.com/gweb-research2023-media/pubtools/1018686.pdf
+[^1]: Vulnerabilities by impact types https://www.cvedetails.com/vulnerabilities-by-types.php
+[^2]: CWE Website https://cwe.mitre.org/
+[^3]: Agentic-AI-Top10-Vulnerability https://github.com/precize/Agentic-AI-Top10-Vulnerability/
+[^4]: Google’s Approach for Secure AI Agents https://storage.googleapis.com/gweb-research2023-media/pubtools/1018686.pdf
