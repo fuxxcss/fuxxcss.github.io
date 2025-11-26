@@ -17,9 +17,9 @@ redirect_from:
 
 **🐙 研究项目：**
 
-- [Redi2Fuzz](https://github.com/fuxxcss/redi2fuzz)，缓存中间件模糊测试框架
-- [Joern101](https://github.com/fuxxcss/joern101)，基于joern的自动化代码审计
-- [CheckSecc](https://github.com/fuxxcss/checksecc)，C语言版CheckSec
+- [Sofa](https://github.com/fuxxcss/sofa)
+- [Roz](https://github.com/fuxxcss/roz)
+- [Checksecc](https://github.com/fuxxcss/checksecc)
 
 ---
 
