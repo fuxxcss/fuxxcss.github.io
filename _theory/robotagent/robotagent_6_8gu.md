@@ -1,5 +1,5 @@
 ---
-title: "RobotAgent：八股文（Part 5/5）"
+title: "RobotAgent：八股文（Part 6/6）"
 excerpt: '大模型，开发框架'
 
 collection: theory

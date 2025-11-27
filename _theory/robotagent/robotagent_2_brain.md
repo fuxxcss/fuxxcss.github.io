@@ -1,10 +1,10 @@
 ---
-title: "RobotAgent：实现（Part 2/5）"
-excerpt: '机器人智能体的组件'
+title: "RobotAgent：大脑（Part 2/6）"
+excerpt: '机器人智能体的大脑'
 
 collection: theory
 category: robotagent
-permalink: /theory/robotagent/parts
+permalink: /theory/robotagent/brain
 tags: 
   - robotagent
 
@@ -16,7 +16,7 @@ share: true
 related: true
 ---
 
-![](../../images/theory/robotagent/parts/transformer.png)
+![](../../images/theory/robotagent/brain/transformer.png)
 
 ## RobotAgent的组件
 
@@ -28,7 +28,7 @@ related: true
 
 一个智能体在离散时间步 t 中运行，不断地与其环境相互作用。在每一步中，发生以下过程：
 
-![](../../images/theory/robotagent/parts/io.png)
+![](../../images/theory/robotagent/brain/io.png)
 
 1. 环境状态 (st ∈ S) 
 2. 感知系统（P），agent感知环境生成观察结果 $ot， ot = P(st, Mt−1) $,其中 Mt−1 引导选择性注意和过滤。
@@ -135,41 +135,10 @@ RLVR 等方法引入了“验证器”，以编程方式或模型评估行动输
 - 记忆缓冲区，缓存短期的工作记忆。
 - 矢量数据库，存储长期记忆。
 
-![](../../images/theory/robotagent/parts/memory.png)
+![](../../images/theory/robotagent/brain/memory.png)
 
 记忆生命周期：
 1. 编码与保留：通过获取、编码和知识推导，将信息存入记忆系统。
 2. 检索与利用：通过记忆匹配、神经记忆网络等机制，在需要时唤回相关信息。
-
-## 感知系统
-
-感知系统是智能体与环境的接口，负责将物理世界的多模态信号转化为内部可处理的数值表示。
-
-感知模态：
-- 文本：来自指令、文档或环境中的文字信息。
-- 视觉：图像、视频流，提供丰富的空间和场景信息。
-- 听觉：声音、语音指令，提供事件和语言信息。
-- 其他传感器：触觉、力觉、本体感觉（关节角度）、深度信息等，为精细操作和物理交互提供关键反馈。
-
-感知环境生成观察结果 ot，ot = P(st, Mt−1),其中 Mt−1 引导选择性注意和过滤。
-
-## 行动系统
-
-行动系统是智能体作用于环境的“执行器”，负责将认知核心的决策转化为具体的、可执行的操作。系统通过与环境交互，收集行动轨迹，并利用预定义的奖励函数完成学习闭环。
-
-![](../../images/theory/robotagent/parts/action.png)
-
-行动系统将行动 at 转换为可执行的形式，a′t = E(at)。
-
-行动系统包括三个主要部分：
-- 行动空间：定义了智能体在所有可能场景下可以执行的全部行动类型。
-- 动态环境下的学习：指智能体在非稳态、不断变化的环境中在线调整和优化其策略的能力。
-- 工具空间：包含了智能体可调用的所有物理工具和数字接口，极大地扩展了其能力边界。
-
-行动与工具空间的分类：
-- 语言空间：通过生成语言来驱动行动，如链式推理、编写代码、检索信息、执行API调用或与数字助手交互。
-  - 对应工具：搜索引擎、代码执行环境、API接口。
-- 物理空间：与真实物理世界进行交互，智能体处理来自真实世界的信号（如力觉、视觉伺服），并生成物理反馈（如控制机械臂移动、机器人底盘导航）。
-  - 对应工具：机械臂、移动机器人底盘、灵巧手、无人机飞控系统。
 
 [^1]: Embodied AI Agents https://arxiv.org/abs/2506.22355
