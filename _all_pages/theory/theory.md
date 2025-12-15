@@ -5,7 +5,7 @@ permalink: /theory/
 author_profile: true
 ---
 
-**关于基础、安全和机器人智能体的理论知识、八股文**
+**关于基础、安全和具身智能的理论知识、八股文**
 
 ---
 
@@ -17,5 +17,6 @@ author_profile: true
 - 漏洞
 - 漏洞挖掘
 
-🧸[机器人智能体](./robotagent)
-- RobotAgent
+🧸[具身智能](./robotagent)
+- 躯体
+- 大脑
