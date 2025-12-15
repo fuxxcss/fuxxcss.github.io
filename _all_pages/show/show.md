@@ -8,7 +8,9 @@ author_profile: true
 
 ### 💦 BL
 
-- https://github.com/redis/redis/security/advisories/GHSA-qrr5-2pc2-6r28
+- [Closed](https://github.com/redis/redis/security/advisories/GHSA-qrr5-2pc2-6r28)
+
+
 ---
 
 ### 🐛 披露
